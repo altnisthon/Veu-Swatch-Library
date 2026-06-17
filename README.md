@@ -1,1 +1,0 @@
-# Veu-Swatch-Library

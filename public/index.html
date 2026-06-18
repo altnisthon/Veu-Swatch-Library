@@ -1254,21 +1254,33 @@ function renderGrid(gridId, rows, isEmpty) {
   grid.innerHTML = rows.map(s => {
     const ss = swatchSeasons(s);
     const m = SM[ss[0]] || SM['Autumn Mute'];
+    const isPalette = s.paletteShades && s.paletteShades.length > 0;
     const badge = s.universal
       ? `<div class="card-badge"><span class="univ-badge">✦ Universal</span></div>`
-      : (s.paletteShades && s.paletteShades.length > 0
-          ? `<div class="card-badge"><span class="palette-badge">🎨 Palette</span></div>`
-          : '');
+      : (isPalette ? `<div class="card-badge"><span class="palette-badge">🎨 Palette</span></div>` : '');
+
+    // Hex row: dot strip for palettes, single hex for singles
+    const hexRow = isPalette
+      ? `<div class="card-hex-row" style="flex-wrap:wrap;gap:5px">
+          ${s.paletteShades.map(sh =>
+            `<div style="display:flex;flex-direction:column;align-items:center;gap:2px">
+              <div class="hex-dot" style="background:${sh.hex};width:16px;height:16px"></div>
+              <span style="font-family:monospace;font-size:7px;color:#C0B8B0;letter-spacing:0">${sh.hex.toUpperCase()}</span>
+            </div>`
+          ).join('')}
+        </div>`
+      : `<div class="card-hex-row">
+          <div class="hex-dot" style="background:${s.hex}"></div>
+          <span class="hex-code">${s.hex.toUpperCase()}</span>
+        </div>`;
+
     return `<div class="card${s.universal?' univ-card':''}" onclick="openDetail('${s.id}')">
       ${badge}
       <div class="card-img">
         ${s.thumb?`<img src="${s.thumb}" alt="${s.shadeName}">`:`<div class="hex-fill" style="background:${s.hex}"></div>`}
       </div>
       <div class="card-body">
-        <div class="card-hex-row">
-          <div class="hex-dot" style="background:${s.hex}"></div>
-          <span class="hex-code">${s.hex.toUpperCase()}</span>
-        </div>
+        ${hexRow}
         <div class="card-brand">${s.brand||''}</div>
         <div class="card-shade">${s.shadeName||''}</div>
         <div class="card-seasons">${ss.map(x=>pillHTML(x,true)).join('')}</div>
@@ -1281,12 +1293,19 @@ function renderGrid(gridId, rows, isEmpty) {
 // ─────────────────────────────────────────────────────────
 // CSV EXPORT
 // ─────────────────────────────────────────────────────────
+function swatchHexes(s) {
+  if (s.paletteShades && s.paletteShades.length > 0) {
+    return s.paletteShades.map(sh => sh.hex).join(' | ');
+  }
+  return s.hex || '';
+}
+
 function exportCSV() {
   let rows = libSeason==='All' ? swatches : swatches.filter(s=>swatchSeasons(s).includes(libSeason));
   if (!rows.length) { showToast('No swatches to export'); return; }
   const lines = [CSV_HEADERS.map(esc).join(','), ...rows.map(s =>
     [s.category,s.brand,s.productName,s.shadeName,s.shadeCode,
-     swatchSeasons(s).join(' | '),s.undertone,s.finish,s.hex,s.priceSGD,
+     swatchSeasons(s).join(' | '),s.undertone,s.finish,swatchHexes(s),s.priceSGD,
      s.whereToBuy,s.purchaseLink,s.imageUrl,s.availability,s.trendTag,
      s.universal?'Yes':'',s.addedDate,s.reason].map(esc).join(',')
   )];
@@ -1302,7 +1321,7 @@ function exportUnivCSV() {
   if (!rows.length) { showToast('No universal swatches to export'); return; }
   const lines = [CSV_HEADERS.map(esc).join(','), ...rows.map(s =>
     [s.category,s.brand,s.productName,s.shadeName,s.shadeCode,
-     swatchSeasons(s).join(' | '),s.undertone,s.finish,s.hex,s.priceSGD,
+     swatchSeasons(s).join(' | '),s.undertone,s.finish,swatchHexes(s),s.priceSGD,
      s.whereToBuy,s.purchaseLink,s.imageUrl,s.availability,s.trendTag,
      'Yes',s.addedDate,s.reason].map(esc).join(',')
   )];
@@ -1320,6 +1339,7 @@ function openDetail(id) {
   const s = swatches.find(x=>x.id===id); if (!s) return;
   const ss = swatchSeasons(s);
   const m = SM[ss[0]] || SM['Autumn Mute'];
+  const isPalette = s.paletteShades && s.paletteShades.length > 0;
   const details = [
     ['Finish', s.finish], ['Price (SGD)', s.priceSGD], ['Where to Buy', s.whereToBuy],
     ['Availability', s.availability], ['Trend Tag', s.trendTag], ['Added', s.addedDate]
@@ -1338,25 +1358,47 @@ function openDetail(id) {
         <div style="font-size:11px;color:#888">${s.shadeName||''}${s.shadeCode?' · '+s.shadeCode:''}</div>
       </div>
     </div>
-    <div class="modal-hex-row">
-      <div class="modal-hex-sw" style="background:${s.hex}"></div>
-      <div>
-        <div style="font-family:monospace;font-size:11px;color:#444">${s.hex.toUpperCase()}</div>
-        <div style="font-size:9.5px;color:#A0988F;margin-top:2px">${reasonShort(s.hex)}</div>
-      </div>
-      ${s.category?`<span style="margin-left:auto;font-size:9px;color:#888;background:#F5F0EB;padding:3px 9px;border-radius:10px">${s.category}</span>`:''}
-    </div>
+    ${isPalette
+      ? `<div class="modal-hex-row" style="flex-wrap:wrap;gap:8px;align-items:flex-start">
+          ${s.paletteShades.map(sh => {
+            const ms = SM[sh.season]||SM['Autumn Mute'];
+            return `<div style="display:flex;flex-direction:column;align-items:center;gap:3px">
+              <div style="width:28px;height:28px;border-radius:50%;background:${sh.hex};border:2px solid #EDE8E0;box-shadow:0 1px 3px rgba(0,0,0,.1)"></div>
+              <span style="font-family:monospace;font-size:8px;color:#888;letter-spacing:0">${sh.hex.toUpperCase()}</span>
+              <span style="font-size:7px;color:${ms.label};font-weight:700;text-align:center;max-width:40px;line-height:1.2">${sh.label||sh.season.split(' ')[0]}</span>
+            </div>`;
+          }).join('')}
+        </div>`
+      : `<div class="modal-hex-row">
+          <div class="modal-hex-sw" style="background:${s.hex}"></div>
+          <div>
+            <div style="font-family:monospace;font-size:11px;color:#444">${s.hex.toUpperCase()}</div>
+            <div style="font-size:9.5px;color:#A0988F;margin-top:2px">${reasonShort(s.hex)}</div>
+          </div>
+          ${s.category?`<span style="margin-left:auto;font-size:9px;color:#888;background:#F5F0EB;padding:3px 9px;border-radius:10px">${s.category}</span>`:''}
+        </div>`
+    }
     ${s.reason?`<div style="font-size:11px;color:#555;line-height:1.7;margin-bottom:14px;padding:10px 14px;background:${m.bg};border-radius:8px;border:1px solid ${m.border}">${s.reason}</div>`:''}
-    ${s.paletteShades && s.paletteShades.length>0 ? `
+    ${isPalette ? `
       <div style="margin-bottom:14px">
-        <div class="lbl">Shade breakdown · ${s.paletteShades.length} shades</div>
-        <div class="palette-detail-strip">
-          ${s.paletteShades.map(sh=>{const ms=SM[sh.season]||SM['Autumn Mute'];return`<div style="display:flex;flex-direction:column;align-items:center;gap:3px" title="${sh.season}${sh.label?' · '+sh.label:''}">
-            <div class="palette-detail-dot" style="background:${sh.hex}"></div>
-            <span style="font-size:7px;color:${ms.label};font-weight:700;text-align:center;max-width:32px;line-height:1.2">${sh.label||sh.season.split(' ')[0]}</span>
-          </div>`;}).join('')}
-        </div>
-      </div>`:'' }
+        <div class="lbl" style="margin-bottom:8px">Season tally · ${s.paletteShades.length} shades</div>
+        ${(() => {
+          const tally = {};
+          s.paletteShades.forEach(sh => { tally[sh.season] = (tally[sh.season]||0)+1; });
+          const maxC = Math.max(...Object.values(tally), 1);
+          return Object.entries(tally).sort((a,b)=>b[1]-a[1]).map(([season,count]) => {
+            const ms = SM[season]||SM['Autumn Mute'];
+            return `<div class="bd-row">
+              <div class="bd-dot" style="background:${ms.dot}"></div>
+              <span class="bd-season" style="color:${ms.label}">${season}</span>
+              <div class="bd-bar-wrap"><div class="bd-bar" style="width:${Math.round(count/maxC*100)}%;background:${ms.dot}"></div></div>
+              <span class="bd-count">${count}</span>
+            </div>`;
+          }).join('');
+        })()}
+      </div>` : ''}
+    ${s.category?`<div style="margin-bottom:10px"><span style="font-size:9px;color:#888;background:#F5F0EB;padding:3px 9px;border-radius:10px">${s.category}</span></div>`:''}
+    ${s.reason?`<div style="font-size:11px;color:#555;line-height:1.7;margin-bottom:14px;padding:10px 14px;background:${m.bg};border-radius:8px;border:1px solid ${m.border}">${s.reason}</div>`:''}
     ${details.length?`<div class="sum-table" style="margin-bottom:14px">${details.map(([k,v])=>`<div class="sum-row"><span class="sum-k">${k}</span><span class="sum-v">${v}</span></div>`).join('')}</div>`:''}
     ${s.purchaseLink?`<a href="${s.purchaseLink}" target="_blank" class="btn-buy">Buy Now ↗</a>`:''}
     <button class="btn-modal-edit" onclick="closeDetail();openEdit('${s.id}')">✏︎ Edit Swatch</button>

@@ -251,7 +251,6 @@ a{color:#932D28;text-decoration:none}
   <div class="nav-tabs">
     <button class="nav-tab active" id="tabLib" onclick="switchView('library')">Library</button>
     <button class="nav-tab univ-tab"  id="tabUniv" onclick="switchView('universals')">✦ Universals</button>
-    <button class="nav-tab"           id="tabAdd"  onclick="switchView('capture')">+ Add</button>
   </div>
 </div>
 
@@ -517,25 +516,19 @@ function newForm() {
 async function loadSwatches() {
   try {
     const res = await fetch('/api/swatches-get');
-    console.log('[VEU] swatches-get status:', res.status);
     if (res.ok) {
       const d = await res.json();
-      console.log('[VEU] swatches-get raw response type:', typeof d, 'isArray:', Array.isArray(d), 'length:', Array.isArray(d) ? d.length : 'n/a');
       if (typeof d === 'string') {
-        // Double-encoded — Upstash returned a JSON string instead of parsed array
-        console.log('[VEU] double-encoded detected, parsing again');
+        // Upstash returns double-encoded JSON string — parse once more
         const parsed = JSON.parse(d);
         if (Array.isArray(parsed)) swatches = parsed.map(migrateEntry);
       } else if (Array.isArray(d)) {
         swatches = d.map(migrateEntry);
-      } else {
-        console.warn('[VEU] unexpected response shape:', d);
       }
     }
   } catch (e) {
     console.error('[VEU] loadSwatches failed:', e);
   }
-  console.log('[VEU] swatches loaded, count:', swatches.length);
   renderLibrary();
   renderUniversals();
 }
@@ -549,19 +542,13 @@ function migrateEntry(s) {
 }
 
 async function persistSwatches() {
-  console.log('[VEU] persistSwatches called, count:', swatches.length);
   try {
     const res = await fetch('/api/swatches-set', {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify({swatches})
     });
-    console.log('[VEU] swatches-set status:', res.status);
-    if (!res.ok) {
-      const body = await res.text();
-      console.error('[VEU] swatches-set error body:', body);
-      throw new Error('Status ' + res.status);
-    }
+    if (!res.ok) throw new Error('Status ' + res.status);
     return true;
   } catch (e) {
     console.error('[VEU] persistSwatches failed:', e);
@@ -808,7 +795,6 @@ function switchView(v) {
   document.getElementById('viewCapture').classList.toggle('hidden', v!=='capture');
   document.getElementById('tabLib').classList.toggle('active', v==='library');
   document.getElementById('tabUniv').classList.toggle('active', v==='universals');
-  document.getElementById('tabAdd').classList.toggle('active', v==='capture');
   document.getElementById('fabBtn').classList.toggle('hidden', v==='capture');
   if (v==='library') renderLibrary();
   if (v==='universals') renderUniversals();
@@ -1136,7 +1122,6 @@ function renderReviewCard() {
 // SAVE
 // ─────────────────────────────────────────────────────────
 async function handleSave() {
-  console.log('[VEU] handleSave called');
   try {
     const reasonEl = document.getElementById('f_reason');
     if (reasonEl) form.reason = reasonEl.value;
@@ -1148,12 +1133,9 @@ async function handleSave() {
       id: Date.now().toString(),
       addedDate: new Date().toLocaleDateString('en-SG',{month:'short',year:'numeric'})
     };
-    console.log('[VEU] saving entry:', entry.brand, entry.shadeName, entry.season);
     swatches.unshift(entry);
 
     const ok = await persistSwatches();
-    console.log('[VEU] persistSwatches result:', ok);
-
     if (ok === false) { swatches.shift(); return; }
 
     const infoEl = document.getElementById('savedInfo');

@@ -539,16 +539,22 @@ function migrateEntry(s) {
 }
 
 async function persistSwatches() {
+  console.log('[VEU] persistSwatches called, count:', swatches.length);
   try {
     const res = await fetch('/api/swatches-set', {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify({swatches})
     });
-    if (!res.ok) throw new Error('Status ' + res.status);
+    console.log('[VEU] swatches-set status:', res.status);
+    if (!res.ok) {
+      const body = await res.text();
+      console.error('[VEU] swatches-set error body:', body);
+      throw new Error('Status ' + res.status);
+    }
     return true;
   } catch (e) {
-    console.error('Save failed', e);
+    console.error('[VEU] persistSwatches failed:', e);
     showToast('Save failed — check connection');
     return false;
   }
@@ -1120,20 +1126,35 @@ function renderReviewCard() {
 // SAVE
 // ─────────────────────────────────────────────────────────
 async function handleSave() {
-  form.reason = document.getElementById('f_reason').value;
-  if (!form.seasons.length) form.seasons = [form.season];
-  const entry = {
-    ...form,
-    id: Date.now().toString(),
-    addedDate: new Date().toLocaleDateString('en-SG',{month:'short',year:'numeric'})
-  };
-  swatches.unshift(entry);
-  const ok = await persistSwatches();
-  if (ok === false) { swatches.shift(); return; }
-  document.getElementById('savedInfo').textContent = [form.brand, form.productName, form.shadeName].filter(Boolean).join(' · ');
-  const pillsEl = document.getElementById('savedPills');
-  pillsEl.innerHTML = form.seasons.map(s=>pillHTML(s)).join('') + (form.universal?`<span class="univ-badge" style="margin-left:4px">✦ Universal</span>`:'');
-  goStep(4);
+  console.log('[VEU] handleSave called');
+  try {
+    const reasonEl = document.getElementById('f_reason');
+    if (reasonEl) form.reason = reasonEl.value;
+    if (!form.seasons || !form.seasons.length) form.seasons = form.season ? [form.season] : ['Autumn Mute'];
+    if (!form.season) form.season = form.seasons[0];
+
+    const entry = {
+      ...form,
+      id: Date.now().toString(),
+      addedDate: new Date().toLocaleDateString('en-SG',{month:'short',year:'numeric'})
+    };
+    console.log('[VEU] saving entry:', entry.brand, entry.shadeName, entry.season);
+    swatches.unshift(entry);
+
+    const ok = await persistSwatches();
+    console.log('[VEU] persistSwatches result:', ok);
+
+    if (ok === false) { swatches.shift(); return; }
+
+    const infoEl = document.getElementById('savedInfo');
+    if (infoEl) infoEl.textContent = [form.brand, form.productName, form.shadeName].filter(Boolean).join(' · ');
+    const pillsEl = document.getElementById('savedPills');
+    if (pillsEl) pillsEl.innerHTML = form.seasons.map(s=>pillHTML(s)).join('') + (form.universal?`<span class="univ-badge" style="margin-left:4px">✦ Universal</span>`:'');
+    goStep(4);
+  } catch(e) {
+    console.error('[VEU] handleSave error:', e);
+    showToast('Save error — check console');
+  }
 }
 
 function resetCapture() {

@@ -1,0 +1,1725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VEU Alchemist · Swatch Library</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:'Montserrat',sans-serif;background:#FDFAF7;color:#1a1a1a;font-size:13px;-webkit-tap-highlight-color:transparent}
+input,select,textarea{width:100%;border:1px solid #EDE8E0;border-radius:6px;padding:9px 12px;font-size:12px;font-family:inherit;background:#fff;color:#333;outline:none;box-sizing:border-box;-webkit-appearance:none}
+input:focus,select:focus,textarea:focus{border-color:#932D28}
+textarea{resize:vertical;line-height:1.6}
+button{font-family:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+a{color:#932D28;text-decoration:none}
+.hidden{display:none!important}
+
+/* ── Labels ── */
+.lbl{font-size:9.5px;letter-spacing:.15em;text-transform:uppercase;color:#B0A8A0;margin-bottom:6px;font-weight:700;display:block}
+
+/* ── Buttons ── */
+.btn{background:#932D28;color:#fff;border:none;border-radius:6px;padding:11px 0;font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;width:100%;transition:background .15s;font-family:inherit}
+.btn:hover:not(:disabled){background:#7A2420}
+.btn:disabled{background:#E0D8D0;color:#B0A8A0;cursor:not-allowed}
+.btn-ghost{background:#F5F0EB;color:#666;border:none;border-radius:6px;padding:11px 18px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;font-family:inherit}
+.btn-ghost:hover{background:#EDE8E0}
+.btn-green{background:#154327;color:#fff;border:none;border-radius:6px;padding:10px 0;font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;width:100%;font-family:inherit;transition:background .15s}
+.btn-green:hover:not(:disabled){background:#0F2F1C}
+.btn-green:disabled{background:#E0D8D0;color:#B0A8A0;cursor:not-allowed}
+
+/* ── Nav ── */
+.nav{background:#fff;border-bottom:1px solid #EDE8E0;padding:0 18px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:50}
+.nav-brand{padding:12px 0}
+.nav-title{font-family:'Cormorant Garamond',serif;font-size:18px;letter-spacing:.22em;color:#932D28;font-weight:300;line-height:1}
+.nav-sub{font-size:8px;letter-spacing:.22em;color:#C0B8B0;text-transform:uppercase;margin-top:3px}
+.nav-tabs{display:flex;gap:2px}
+.nav-tab{background:transparent;color:#A0988F;border:none;border-radius:5px;padding:7px 12px;font-size:9.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;transition:all .15s;white-space:nowrap}
+.nav-tab.active{background:#932D28;color:#fff}
+.nav-tab.univ-tab{color:#7A6C2A}
+.nav-tab.univ-tab.active{background:#B8A96A;color:#fff}
+
+/* ── Season pills shared ── */
+.s-pill{display:inline-flex;align-items:center;gap:4px;font-size:8.5px;font-weight:700;letter-spacing:.08em;padding:3px 9px;border-radius:20px;white-space:nowrap;border-width:1px;border-style:solid}
+.s-dot{width:6px;height:6px;border-radius:50%;display:inline-block;flex-shrink:0}
+
+/* ── Season tab strip ── */
+.season-strip{background:#fff;border-bottom:1px solid #EDE8E0;display:flex;overflow-x:auto;padding:0 14px;scrollbar-width:none;gap:0}
+.season-strip::-webkit-scrollbar{display:none}
+.s-tab{background:none;border:none;border-bottom:2px solid transparent;padding:9px 11px;font-size:9px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;color:#A0988F;font-weight:500;transition:all .2s;font-family:inherit;flex-shrink:0}
+.s-tab.active{border-bottom-color:#932D28;color:#932D28;font-weight:700}
+
+/* ── Category filter strip ── */
+.cat-strip{background:#FAF7F4;border-bottom:1px solid #EDE8E0;display:flex;align-items:center;gap:6px;padding:8px 16px;overflow-x:auto;scrollbar-width:none}
+.cat-strip::-webkit-scrollbar{display:none}
+.cat-btn{background:transparent;color:#A09890;border:1px solid #EDE8E0;border-radius:20px;padding:4px 11px;font-size:9.5px;cursor:pointer;font-family:inherit;font-weight:400;letter-spacing:.04em;flex-shrink:0;white-space:nowrap;transition:all .15s}
+.cat-btn.active{background:#932D28;color:#fff;border-color:#932D28;font-weight:700}
+
+/* ── Stats bar ── */
+.stats-bar{background:#fff;border-bottom:1px solid #EDE8E0;padding:12px 18px;display:flex;justify-content:space-between;align-items:center}
+.stat-num{font-family:'Cormorant Garamond',serif;font-size:26px;color:#932D28;font-weight:400;line-height:1;letter-spacing:.02em}
+.stat-lbl{font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:#C0B8B0;margin-top:2px}
+
+/* ── Swatch grid ── */
+.swatch-grid{padding:16px 16px 80px;display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:12px}
+.card{background:#fff;border-radius:8px;overflow:hidden;border:1px solid #F0EBE5;box-shadow:0 1px 6px rgba(0,0,0,.05);cursor:pointer;transition:box-shadow .2s;position:relative}
+.card:hover{box-shadow:0 4px 16px rgba(0,0,0,.1)}
+.card.univ-card{border-color:#E8DCAA;border-width:1.5px}
+.card-img{width:100%;aspect-ratio:1;background:#F8F4F0;overflow:hidden;position:relative}
+.card-img img{width:100%;height:100%;object-fit:cover;display:block}
+.card-img .hex-fill{width:100%;height:100%;display:block}
+.card-badge{position:absolute;top:6px;left:6px;z-index:2}
+.univ-badge{display:inline-flex;align-items:center;gap:3px;font-size:8px;font-weight:700;letter-spacing:.08em;padding:2px 8px;border-radius:10px;background:#FDFBF0;color:#7A6C2A;border:1px solid #E8DCAA}
+.palette-badge{display:inline-flex;align-items:center;gap:3px;font-size:8px;font-weight:700;padding:2px 7px;border-radius:10px;background:#FEF6EA;color:#7A4818;border:1px solid #EDD0A8}
+.card-body{padding:10px 11px 12px}
+.card-hex-row{display:flex;align-items:center;gap:6px;margin-bottom:5px}
+.hex-dot{width:13px;height:13px;border-radius:50%;border:1.5px solid rgba(0,0,0,.08);flex-shrink:0}
+.hex-code{font-family:monospace;font-size:8.5px;color:#C0B8B0}
+.card-brand{font-size:10.5px;font-weight:700;margin-bottom:2px;line-height:1.3;color:#1a1a1a}
+.card-shade{font-size:9.5px;color:#888;margin-bottom:6px;line-height:1.4}
+.card-seasons{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:5px}
+.card-cat{font-size:8px;color:#A0988F;background:#F5F0EB;padding:2px 7px;border-radius:10px;letter-spacing:.06em;display:inline-block}
+
+/* ── Empty state ── */
+.empty-state{grid-column:1/-1;text-align:center;padding:60px 20px}
+.empty-icon{font-size:32px;margin-bottom:12px}
+.empty-text{font-size:11px;color:#C8C0B8;line-height:2;letter-spacing:.04em}
+
+/* ── FAB ── */
+.fab{position:fixed;bottom:24px;right:20px;background:#932D28;color:#fff;border:none;border-radius:50px;padding:12px 20px;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;box-shadow:0 4px 16px rgba(147,45,40,.35);z-index:30;font-family:inherit;transition:all .2s;display:flex;align-items:center;gap:6px}
+.fab:hover{background:#7A2420;box-shadow:0 6px 20px rgba(147,45,40,.45)}
+
+/* ── Step bar ── */
+.steps-bar{background:#fff;border-bottom:1px solid #EDE8E0;display:flex;padding:0 16px;overflow-x:auto;scrollbar-width:none}
+.steps-bar::-webkit-scrollbar{display:none}
+.step-item{display:flex;align-items:center;gap:5px;padding:9px 8px 9px 0;margin-right:2px;flex-shrink:0}
+.step-num{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9.5px;font-weight:700;background:#F0EBE5;color:#C0B8B0;transition:all .2s;flex-shrink:0}
+.step-num.done{background:#932D28;color:#fff}
+.step-label{font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:#C0B8B0;font-weight:400}
+.step-label.active{color:#932D28;font-weight:700}
+.step-sep{color:#E0D8D0;font-size:11px;margin-left:2px}
+
+/* ── Capture view ── */
+.capture-wrap{max-width:520px;margin:0 auto;padding:22px 18px 80px}
+.capture-title{font-size:13px;font-weight:700;margin-bottom:4px}
+.capture-sub{font-size:11px;color:#A0988F;margin-bottom:16px;line-height:1.7}
+
+/* ── Dropzone ── */
+.dropzone{border:2px dashed #D75C61;border-radius:10px;padding:20px;text-align:center;cursor:pointer;background:#FDFAF7;min-height:150px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;margin-bottom:16px;transition:border-color .2s}
+.dropzone.has-img{border-color:#EDE8E0}
+.dropzone.loading{border-color:#EDE8E0}
+.dropzone-icon{font-size:28px}
+.dropzone-hint{font-size:11px;color:#C0B8B0;letter-spacing:.04em}
+.dropzone img{max-height:170px;max-width:100%;border-radius:8px;object-fit:contain}
+.replace-hint{font-size:9.5px;color:#C0B8B0;margin-top:4px}
+
+/* ── Hex box ── */
+.hex-box{background:#fff;border:1px solid #EDE8E0;border-radius:8px;padding:14px;margin-bottom:16px}
+.hex-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.hex-swatch{width:32px;height:32px;border-radius:50%;border:2px solid #EDE8E0;flex-shrink:0}
+.season-chip{border-radius:8px;padding:10px 14px;display:flex;align-items:center;gap:12px;margin-top:4px}
+.chip-dot{width:11px;height:11px;border-radius:50%;flex-shrink:0}
+.chip-name{font-size:13px;font-weight:700;margin-bottom:2px}
+.chip-reason{font-size:9.5px;opacity:.75}
+
+/* ── Palette clusters ── */
+.palette-box{background:#fff;border:1px solid #EDE8E0;border-radius:8px;padding:14px;margin-bottom:16px}
+.cluster-strip{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 8px}
+.cluster-dot{width:34px;height:34px;border-radius:50%;border:2px solid rgba(0,0,0,.08);cursor:pointer;position:relative;flex-shrink:0;transition:all .15s;box-shadow:0 1px 4px rgba(0,0,0,.12)}
+.cluster-dot:hover{transform:scale(1.1)}
+.cluster-dot.removed{opacity:.25;transform:scale(.85)}
+.cluster-dot .rm-x{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;font-weight:300;opacity:0;transition:opacity .15s;text-shadow:0 1px 2px rgba(0,0,0,.4)}
+.cluster-dot:hover .rm-x{opacity:1}
+
+/* ── Toggle (Universal, Palette) ── */
+.toggle-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;border-radius:8px;cursor:pointer;border:1.5px solid #EDE8E0;background:#FDFAF7;transition:all .2s;margin-bottom:14px}
+.toggle-row.on-gold{background:#FDFBF0;border-color:#E8DCAA}
+.toggle-row.on-amber{background:#FEF6EA;border-color:#EDD0A8}
+.toggle-label{font-size:11px;font-weight:700;color:#A09890;letter-spacing:.06em}
+.toggle-row.on-gold .toggle-label{color:#7A6C2A}
+.toggle-row.on-amber .toggle-label{color:#7A4818}
+.toggle-sub{font-size:9.5px;color:#C0B8B0;letter-spacing:.04em;line-height:1.5;margin-top:1px}
+.pill-track{width:36px;height:20px;border-radius:10px;background:#DDD8D2;position:relative;flex-shrink:0;transition:background .2s}
+.toggle-row.on-gold .pill-track{background:#B8A96A}
+.toggle-row.on-amber .pill-track{background:#C48C58}
+.pill-thumb{position:absolute;top:3px;left:3px;width:14px;height:14px;border-radius:50%;background:#fff;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.toggle-row.on-gold .pill-thumb,.toggle-row.on-amber .pill-thumb{left:19px}
+
+/* ── Field ── */
+.field{margin-bottom:12px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+/* ── Cat selector (add form) ── */
+.cat-select-wrap{display:flex;flex-wrap:wrap;gap:5px;margin-top:4px}
+.cat-sel-btn{background:#F8F4F0;color:#888;border:1.5px solid #EDE8E0;border-radius:20px;padding:4px 11px;font-size:9.5px;cursor:pointer;font-family:inherit;font-weight:400;transition:all .15s}
+.cat-sel-btn.active{background:#932D28;color:#fff;border-color:#932D28;font-weight:700}
+
+/* ── Season multi-select ── */
+.season-multi-wrap{display:flex;flex-wrap:wrap;gap:6px}
+.sm-btn{border-radius:20px;padding:5px 12px;font-size:9.5px;cursor:pointer;font-family:inherit;font-weight:400;border:1.5px solid #EDE8E0;background:#F8F4F0;color:#888;transition:all .15s;display:inline-flex;align-items:center;gap:5px}
+.sm-dot{width:7px;height:7px;border-radius:50%;display:inline-block;flex-shrink:0}
+
+/* ── Mini preview (step 2 top) ── */
+.mini-preview{display:flex;align-items:center;gap:12px;margin-bottom:16px;background:#fff;border:1px solid #EDE8E0;border-radius:8px;padding:11px}
+.mini-preview img{width:48px;height:48px;border-radius:6px;object-fit:cover;flex-shrink:0}
+
+/* ── Review card ── */
+.review-card{border-radius:10px;padding:14px;margin-bottom:14px;display:flex;gap:12px;align-items:flex-start}
+.review-card img{width:60px;height:60px;border-radius:8px;object-fit:cover;flex-shrink:0}
+.confidence{font-size:8.5px;padding:2px 7px;border-radius:10px;font-weight:700}
+.confidence.high{background:#E8F5E9;color:#2E7D32}
+.confidence.med{background:#FFF3E0;color:#E65100}
+.confidence.low{background:#FEF0F0;color:#C02020}
+
+/* ── Palette breakdown ── */
+.palette-breakdown{background:#FDFAF7;border:1px solid #EDE8E0;border-radius:8px;padding:12px 14px;margin-bottom:14px}
+.bd-row{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.bd-dot{width:14px;height:14px;border-radius:50%;border:1.5px solid rgba(0,0,0,.08);flex-shrink:0}
+.bd-season{font-size:9.5px;font-weight:700;flex:1}
+.bd-bar-wrap{width:70px;height:6px;background:#EDE8E0;border-radius:3px;flex-shrink:0}
+.bd-bar{height:100%;border-radius:3px}
+.bd-count{font-size:9px;color:#B0A8A0;width:18px;text-align:right;flex-shrink:0}
+
+/* ── Summary table ── */
+.sum-table{background:#fff;border:1px solid #EDE8E0;border-radius:8px;overflow:hidden;margin-bottom:14px}
+.sum-row{display:flex;border-bottom:1px solid #F5F0EB;padding:7px 13px}
+.sum-row:last-child{border-bottom:none}
+.sum-k{font-size:9.5px;color:#B0A8A0;width:90px;flex-shrink:0;font-weight:600}
+.sum-v{font-size:9.5px;color:#444;word-break:break-all;flex:1}
+
+/* ── Step 4 saved ── */
+.saved-wrap{text-align:center;padding:28px 0 20px}
+.saved-check{font-size:36px;margin-bottom:10px}
+.saved-title{font-family:'Cormorant Garamond',serif;font-size:22px;color:#932D28;margin-bottom:6px;letter-spacing:.05em;font-weight:400}
+.export-hint{background:#F5F0EB;border-radius:8px;padding:14px 16px;margin:0 0 20px;font-size:11px;color:#888;line-height:1.8;text-align:left}
+
+/* ── Busy banner ── */
+.busy-banner{background:#FFF7F5;border-bottom:1px solid #F1BAB3;padding:10px 20px;text-align:center;font-size:11px;color:#932D28;letter-spacing:.06em}
+
+/* ── Error box ── */
+.error-box{background:#FEF0F0;border:1px solid #F5BFBF;border-radius:6px;padding:10px 14px;margin-bottom:14px;font-size:11px;color:#C02020;line-height:1.6}
+
+/* ── Detail modal ── */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;justify-content:center;z-index:100}
+.modal-sheet{background:#fff;border-radius:16px 16px 0 0;width:100%;max-width:520px;max-height:88vh;overflow-y:auto;padding:20px 20px 36px}
+.modal-handle{width:36px;height:4px;background:#EDE8E0;border-radius:2px;margin:0 auto 16px}
+.modal-head{display:flex;gap:14px;margin-bottom:16px;align-items:flex-start}
+.modal-head img{width:80px;height:80px;border-radius:10px;object-fit:cover;flex-shrink:0}
+.modal-hex-row{display:flex;align-items:center;gap:10px;margin-bottom:14px;background:#FDFAF7;border-radius:8px;padding:10px 14px}
+.modal-hex-sw{width:28px;height:28px;border-radius:50%;border:2px solid #EDE8E0;flex-shrink:0}
+.btn-modal-edit{width:100%;background:#F5F0EB;color:#555;border:none;border-radius:6px;padding:10px 0;font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;font-family:inherit;transition:background .15s}
+.btn-modal-edit:hover{background:#EDE8E0}
+.btn-modal-del{width:100%;background:#FEF0F0;color:#C02020;border:1px solid #F5BFBF;border-radius:6px;padding:10px 0;font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;font-family:inherit}
+.btn-buy{display:block;text-align:center;background:#932D28;color:#fff;border-radius:6px;padding:11px 0;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px}
+
+/* ── Edit modal ── */
+.edit-bg{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;justify-content:center;z-index:110}
+.edit-sheet{background:#fff;border-radius:16px 16px 0 0;width:100%;max-width:520px;max-height:92vh;overflow-y:auto;padding:20px 20px 40px}
+.edit-section{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#B0A8A0;font-weight:700;margin:18px 0 10px;padding-bottom:6px;border-bottom:1px solid #F0EBE5}
+.edit-section:first-of-type{margin-top:0}
+.edit-save-bar{display:flex;gap:10px;margin-top:18px;position:sticky;bottom:0;background:#fff;padding:12px 0 0;border-top:1px solid #F0EBE5}
+
+/* ── Analyse result ── */
+.analyse-result{display:none;margin-top:10px;padding:10px 12px;border-radius:8px;font-size:10px;line-height:1.6}
+
+/* ── Palette modal-detail strip ── */
+.palette-detail-strip{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.palette-detail-dot{width:28px;height:28px;border-radius:50%;border:1.5px solid rgba(0,0,0,.08);flex-shrink:0;box-shadow:0 1px 3px rgba(0,0,0,.1)}
+
+/* ── Toast ── */
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 20px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:.06em;z-index:500;opacity:1;transition:opacity .4s;white-space:nowrap}
+
+/* ── Universal banner ── */
+.univ-banner{background:#FDFBF0;border-bottom:1px solid #E8DCAA;padding:9px 18px;display:flex;align-items:center;gap:8px}
+.univ-banner-dot{width:7px;height:7px;border-radius:50%;background:#B8A96A;flex-shrink:0}
+
+/* ── Sort select ── */
+.sort-sel{width:auto;font-size:10px;padding:5px 10px;border-radius:6px;border:1px solid #EDE8E0;background:#fff;flex-shrink:0}
+
+/* ── Delete confirm inline ── */
+.del-confirm{background:#FEF0F0;border:1px solid #F5BFBF;border-radius:8px;padding:12px 14px;margin-top:8px;text-align:center}
+</style>
+</head>
+<body>
+
+<!-- ══ NAV ══════════════════════════════════════════════ -->
+<div class="nav">
+  <div class="nav-brand">
+    <div class="nav-title">VEU ALCHEMIST</div>
+    <div class="nav-sub">Swatch Library</div>
+  </div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" id="tabLib" onclick="switchView('library')">Library</button>
+    <button class="nav-tab univ-tab"  id="tabUniv" onclick="switchView('universals')">✦ Universals</button>
+    <button class="nav-tab"           id="tabAdd"  onclick="switchView('capture')">+ Add</button>
+  </div>
+</div>
+
+<!-- ══ LIBRARY VIEW ══════════════════════════════════════ -->
+<div id="viewLibrary">
+
+  <!-- Stats bar -->
+  <div class="stats-bar">
+    <div>
+      <div class="stat-num" id="libTotal">0</div>
+      <div class="stat-lbl">Swatches in library</div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <select class="sort-sel" id="sortSel" onchange="renderLibrary()">
+        <option value="newest">Newest first</option>
+        <option value="az">Brand A–Z</option>
+        <option value="season">By season</option>
+      </select>
+      <button class="btn-ghost" onclick="exportCSV()" style="padding:7px 12px;font-size:9px">↓ Export</button>
+    </div>
+  </div>
+
+  <!-- Season tab strip — all 8 always visible -->
+  <div class="season-strip" id="libSeasonStrip"></div>
+
+  <!-- Category filter -->
+  <div class="cat-strip" id="libCatStrip"></div>
+
+  <!-- Grid -->
+  <div class="swatch-grid" id="libGrid"></div>
+</div>
+
+<!-- ══ UNIVERSALS VIEW ═══════════════════════════════════ -->
+<div id="viewUniversals" class="hidden">
+  <div class="univ-banner">
+    <div class="univ-banner-dot"></div>
+    <span style="font-size:9.5px;font-weight:700;color:#7A6C2A;letter-spacing:.1em;text-transform:uppercase">Universally Flattering</span>
+    <span style="font-size:9.5px;color:#C0B8B0;margin-left:4px">— marked when adding or editing</span>
+    <button class="btn-ghost" onclick="exportUnivCSV()" style="padding:5px 10px;font-size:9px;margin-left:auto">↓ Export</button>
+  </div>
+  <div class="stats-bar">
+    <div>
+      <div class="stat-num" id="univTotal">0</div>
+      <div class="stat-lbl">Universal swatches</div>
+    </div>
+  </div>
+  <div class="season-strip" id="univSeasonStrip"></div>
+  <div class="cat-strip" id="univCatStrip"></div>
+  <div class="swatch-grid" id="univGrid"></div>
+</div>
+
+<!-- ══ ADD / CAPTURE VIEW ════════════════════════════════ -->
+<div id="viewCapture" class="hidden">
+  <div class="steps-bar" id="stepsBar"></div>
+  <div id="busyBanner" class="busy-banner hidden">Analysing with AI…</div>
+  <div class="capture-wrap">
+    <div id="errorBox" class="error-box hidden"></div>
+
+    <!-- ── Step 1: Upload ── -->
+    <div id="step1">
+      <div class="capture-title">Upload a product swatch</div>
+      <div class="capture-sub">Upload a product screenshot. Single shades are extracted automatically. Toggle Palette Mode for multi-shade eyeshadow palettes.</div>
+
+      <!-- Palette mode toggle -->
+      <div class="toggle-row" id="palToggle" onclick="togglePaletteMode()">
+        <div>
+          <div class="toggle-label">🎨 Palette Mode</div>
+          <div class="toggle-sub">Detects multiple shades, classifies each to a season</div>
+        </div>
+        <div class="pill-track"><div class="pill-thumb"></div></div>
+      </div>
+
+      <!-- Dropzone -->
+      <div class="dropzone" id="dropzone" onclick="document.getElementById('fileIn').click()">
+        <div class="dropzone-icon">📷</div>
+        <div class="dropzone-hint">Tap to upload product screenshot</div>
+        <input type="file" id="fileIn" accept="image/*" style="display:none" onchange="handleFile(this.files[0])">
+      </div>
+
+      <!-- Hex display (single shade) -->
+      <div class="hex-box hidden" id="hexBox">
+        <div class="lbl">Extracted colour</div>
+        <div class="hex-row">
+          <div class="hex-swatch" id="hexSwatch"></div>
+          <input id="hexInput" style="font-family:monospace;flex:1" placeholder="#rrggbb" oninput="onHexInput(this.value)">
+        </div>
+        <div class="season-chip hidden" id="seasonChip"></div>
+      </div>
+
+      <!-- Palette clusters -->
+      <div class="palette-box hidden" id="paletteBox">
+        <div class="lbl">Detected shades — <span id="clusterCount" style="color:#932D28"></span></div>
+        <div class="cluster-strip" id="clusterStrip"></div>
+        <div style="font-size:9.5px;color:#B0A8A0;line-height:1.6">Tap a shade to remove it (packaging colours, whites, blacks). Remaining shades will be analysed.</div>
+      </div>
+
+      <button class="btn" id="step1Next" disabled onclick="goStep(2)">Continue → Add Details</button>
+    </div>
+
+    <!-- ── Step 2: Details ── -->
+    <div id="step2" class="hidden">
+      <div class="capture-title">Product details</div>
+      <div class="capture-sub">Fill in what you know. AI will refine the season and write the notes.</div>
+      <div class="mini-preview" id="miniPreview"></div>
+
+      <div class="grid2" style="margin-bottom:10px">
+        <div class="field"><div class="lbl">Brand</div><input id="f_brand" placeholder="e.g. Romand"></div>
+        <div class="field"><div class="lbl">Product Name</div><input id="f_product" placeholder="e.g. Juicy Lasting Tint"></div>
+        <div class="field"><div class="lbl">Shade Name</div><input id="f_shade" placeholder="e.g. 05 Jujube"></div>
+        <div class="field"><div class="lbl">Shade Code</div><input id="f_code" placeholder="e.g. 05"></div>
+      </div>
+
+      <div class="field">
+        <div class="lbl">Category</div>
+        <div class="cat-select-wrap" id="catSelWrap"></div>
+      </div>
+
+      <div class="grid2" style="margin-bottom:10px">
+        <div class="field"><div class="lbl">Finish</div><input id="f_finish" placeholder="e.g. Sheer Tint"></div>
+        <div class="field"><div class="lbl">Price (SGD)</div><input id="f_price" placeholder="e.g. $15–$22"></div>
+        <div class="field"><div class="lbl">Where to Buy SG</div><input id="f_wtb" placeholder="e.g. Shopee, Sephora"></div>
+        <div class="field">
+          <div class="lbl">Availability</div>
+          <select id="f_avail">
+            <option>Widely available</option><option>Available</option><option>Online only</option><option>Limited</option>
+          </select>
+        </div>
+      </div>
+      <div class="field"><div class="lbl">Purchase Link</div><input id="f_link" placeholder="https://shopee.sg/…"></div>
+      <div class="field"><div class="lbl">Product Image URL</div><input id="f_img" placeholder="https://…"></div>
+      <div class="field" style="margin-bottom:14px"><div class="lbl">Trend Tag (optional)</div><input id="f_tag" placeholder="e.g. K-Beauty Vivid 2026"></div>
+
+      <div class="toggle-row" id="univToggle" onclick="toggleUniversal()">
+        <div>
+          <div class="toggle-label">✦ Mark as Universal</div>
+          <div class="toggle-sub">Universally flattering — works across all seasons</div>
+        </div>
+        <div class="pill-track"><div class="pill-thumb"></div></div>
+      </div>
+
+      <div style="display:flex;gap:10px">
+        <button class="btn-ghost" onclick="goStep(1)">← Back</button>
+        <button class="btn" id="analyseBtn" onclick="runAI()" style="flex:1">Analyse with AI →</button>
+      </div>
+    </div>
+
+    <!-- ── Step 3: Review ── -->
+    <div id="step3" class="hidden">
+      <div class="capture-title">Review before saving</div>
+      <div class="capture-sub">Check everything looks right. Adjust seasons or edit the notes below.</div>
+      <div class="review-card" id="reviewCard"></div>
+      <div style="margin-bottom:14px">
+        <div class="lbl" style="margin-bottom:8px">Seasons — tap to toggle. AI suggestion is pre-selected.</div>
+        <div class="season-multi-wrap" id="seasonMulti"></div>
+      </div>
+      <div id="paletteBreakdown" class="hidden"></div>
+      <div class="field" style="margin-bottom:12px">
+        <div class="lbl">Notes / Why it works (editable)</div>
+        <textarea id="f_reason" rows="4"></textarea>
+      </div>
+      <div class="sum-table hidden" id="sumTable"></div>
+      <div style="display:flex;gap:10px">
+        <button class="btn-ghost" onclick="goStep(2)">← Edit</button>
+        <button class="btn" onclick="handleSave()" style="flex:1">✓ Save to Library</button>
+      </div>
+    </div>
+
+    <!-- ── Step 4: Saved ── -->
+    <div id="step4" class="hidden">
+      <div class="saved-wrap">
+        <div class="saved-check">✓</div>
+        <div class="saved-title">Saved to Library</div>
+        <div id="savedInfo" style="font-size:11px;color:#A0988F;margin-bottom:8px"></div>
+        <div id="savedPills" style="margin-bottom:20px;display:flex;flex-wrap:wrap;gap:4px;justify-content:center"></div>
+        <div class="export-hint">
+          <strong style="font-size:10px;letter-spacing:.08em;text-transform:uppercase">Export to Google Sheets</strong><br>
+          Go to <strong>Library</strong> → click <strong>Export</strong> → open your sheet → File → Import → Upload the CSV → select <em>Replace spreadsheet</em> or <em>Append rows</em>.
+        </div>
+        <div style="display:flex;gap:10px;justify-content:center">
+          <button class="btn" onclick="resetCapture()" style="width:auto;padding:10px 22px">+ Add Another</button>
+          <button class="btn-ghost" onclick="switchView('library')">View Library</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ FAB ════════════════════════════════════════════════ -->
+<button class="fab" id="fabBtn" onclick="switchView('capture')">
+  <span style="font-size:16px;line-height:1">+</span> Add Swatch
+</button>
+
+<!-- ══ DETAIL MODAL ══════════════════════════════════════ -->
+<div class="modal-bg hidden" id="detailModal" onclick="closeDetail()">
+  <div class="modal-sheet" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div id="detailContent"></div>
+  </div>
+</div>
+
+<!-- ══ EDIT MODAL ═══════════════════════════════════════ -->
+<div class="edit-bg hidden" id="editModal" onclick="closeEdit()">
+  <div class="edit-sheet" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div id="editContent"></div>
+  </div>
+</div>
+
+<script>
+// ─────────────────────────────────────────────────────────
+// CONSTANTS
+// ─────────────────────────────────────────────────────────
+const SEASONS = ['Spring Light','Spring Bright','Summer Light','Summer Mute','Autumn Mute','Autumn Deep','Winter Bright','Winter Dark'];
+const CATS    = ['Base','Concealer','Blush','Bronzer','Highlight','Eyeshadow','Eyeliner','Mascara','Brow','Lip','Lip Liner','Setting'];
+
+const SM = {
+  'Spring Light':  {dot:'#EDB49A',bg:'#FFF7F3',label:'#A05838',border:'#F5D8CB'},
+  'Spring Bright': {dot:'#FF7B5A',bg:'#FFF2ED',label:'#C03A18',border:'#FFCABD'},
+  'Summer Light':  {dot:'#C4B2DC',bg:'#F8F4FF',label:'#624898',border:'#DDD0F0'},
+  'Summer Mute':   {dot:'#9898BC',bg:'#EEEEFC',label:'#383878',border:'#CACAE8'},
+  'Autumn Mute':   {dot:'#C48C58',bg:'#FEF6EA',label:'#7A4818',border:'#EDD0A8'},
+  'Autumn Deep':   {dot:'#8B3228',bg:'#FEEEEC',label:'#8B3228',border:'#EDBBBB'},
+  'Winter Bright': {dot:'#4060CC',bg:'#EEF0FF',label:'#1828A0',border:'#B8C4F0'},
+  'Winter Dark':   {dot:'#20205C',bg:'#EAEAF8',label:'#20205C',border:'#B8B8DC'},
+};
+
+const CSV_HEADERS = ['Category','Brand','Product Name','Shade Name','Shade Code','Seasons','Undertone','Finish','Hex','Price (SGD)','Where to Buy SG','Purchase Link','Image URL','Availability','Trend Tag','Universal','Added','Notes'];
+
+// ─────────────────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────────────────
+let swatches     = [];
+let libSeason    = 'All';
+let libCat       = 'All';
+let univSeason   = 'All';
+let univCat      = 'All';
+let currentView  = 'library';
+let currentStep  = 1;
+let paletteMode  = false;
+let clusters     = [];
+let form         = newForm();
+
+// Edit state
+let editId       = null;
+let editForm     = {};
+let editPalMode  = false;
+let editClusters = [];
+
+function newForm() {
+  return {
+    thumb:null, hex:'', brand:'', productName:'', shadeName:'', shadeCode:'',
+    category:'', finish:'', priceSGD:'', whereToBuy:'', purchaseLink:'',
+    imageUrl:'', availability:'Widely available', trendTag:'',
+    season:'', seasons:[], undertone:'', value:'', chroma:'',
+    reason:'', confidence:'', universal:false,
+    paletteShades:null, paletteTally:null
+  };
+}
+
+// ─────────────────────────────────────────────────────────
+// PERSISTENCE — Upstash via serverless API
+// ─────────────────────────────────────────────────────────
+async function loadSwatches() {
+  try {
+    const res = await fetch('/api/swatches-get');
+    if (res.ok) {
+      const d = await res.json();
+      if (Array.isArray(d)) {
+        swatches = d.map(migrateEntry);
+      }
+    }
+  } catch (e) {
+    console.error('Load failed', e);
+  }
+  renderLibrary();
+  renderUniversals();
+}
+
+function migrateEntry(s) {
+  // Ensure seasons array exists
+  if (!s.seasons || !Array.isArray(s.seasons)) {
+    s.seasons = s.season ? [s.season] : [];
+  }
+  return s;
+}
+
+async function persistSwatches() {
+  try {
+    const res = await fetch('/api/swatches-set', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({swatches})
+    });
+    if (!res.ok) throw new Error('Status ' + res.status);
+    return true;
+  } catch (e) {
+    console.error('Save failed', e);
+    showToast('Save failed — check connection');
+    return false;
+  }
+}
+
+// Poll every 15s to stay in sync across users
+let pollTimer = null;
+function startPolling() {
+  pollTimer = setInterval(async () => {
+    try {
+      const res = await fetch('/api/swatches-get');
+      if (res.ok) {
+        const d = await res.json();
+        if (Array.isArray(d)) {
+          swatches = d.map(migrateEntry);
+          renderLibrary();
+          renderUniversals();
+        }
+      }
+    } catch {}
+  }, 15000);
+}
+
+// ─────────────────────────────────────────────────────────
+// COLOUR SCIENCE
+// ─────────────────────────────────────────────────────────
+function rgbToHsl(r, g, b) {
+  r /= 255; g /= 255; b /= 255;
+  const mx = Math.max(r,g,b), mn = Math.min(r,g,b);
+  let h = 0, s = 0, l = (mx+mn)/2;
+  if (mx !== mn) {
+    const d = mx-mn;
+    s = l > 0.5 ? d/(2-mx-mn) : d/(mx+mn);
+    switch(mx) {
+      case r: h = ((g-b)/d + (g<b?6:0))/6; break;
+      case g: h = ((b-r)/d + 2)/6; break;
+      case b: h = ((r-g)/d + 4)/6; break;
+    }
+  }
+  return [h*360, s*100, l*100];
+}
+
+function isWarm(hex) {
+  const r=parseInt(hex.slice(1,3),16), g=parseInt(hex.slice(3,5),16), b=parseInt(hex.slice(5,7),16);
+  const [h,s,l] = rgbToHsl(r,g,b);
+  if (l>80 && (b-g)>-70) return false;
+  if (h<=50) return (r-g)>-20;
+  if (h>300) return (r-g)>100;
+  return (g-b) > 15;
+}
+
+function suggestSeason(hex) {
+  if (!/^#[0-9a-fA-F]{6}$/.test(hex)) return 'Autumn Mute';
+  const r=parseInt(hex.slice(1,3),16), g=parseInt(hex.slice(3,5),16), b=parseInt(hex.slice(5,7),16);
+  const [h,s,l] = rgbToHsl(r,g,b);
+  const chroma = (s/100)*(1-Math.abs(2*l/100-1));
+  const warm=isWarm(hex), light=l>=62, dark=l<=38, bright=chroma>=0.35;
+  if (warm) {
+    if (light) return bright ? 'Spring Bright' : 'Spring Light';
+    if (dark)  return 'Autumn Deep';
+    return bright ? 'Spring Bright' : 'Autumn Mute';
+  } else {
+    if (light) return 'Summer Light';
+    if (dark)  return bright ? 'Winter Dark' : 'Summer Mute';
+    return bright ? 'Winter Bright' : 'Summer Mute';
+  }
+}
+
+function reasonShort(hex) {
+  if (!/^#[0-9a-fA-F]{6}$/.test(hex)) return '';
+  const r=parseInt(hex.slice(1,3),16), g=parseInt(hex.slice(3,5),16), b=parseInt(hex.slice(5,7),16);
+  const [h,s,l] = rgbToHsl(r,g,b);
+  const chroma = (s/100)*(1-Math.abs(2*l/100-1));
+  const warm=isWarm(hex), light=l>=62, dark=l<=38, bright=chroma>=0.35;
+  return `${warm?'Warm':'Cool'} undertone · ${light?'Light':dark?'Deep':'Medium'} value · ${bright?'Vivid':'Muted'} chroma`;
+}
+
+function extractHex(data) {
+  let rS=0,gS=0,bS=0,n=0;
+  for (let i=0; i<data.length; i+=4) {
+    const r=data[i],g=data[i+1],b=data[i+2],a=data[i+3];
+    if (a<128) continue;
+    if (r>238 && g>238 && b>238) continue;
+    if (r<18  && g<18  && b<18)  continue;
+    rS+=r; gS+=g; bS+=b; n++;
+  }
+  if (!n) return '#888888';
+  const h = v => Math.min(255,Math.max(0,Math.round(v))).toString(16).padStart(2,'0');
+  return `#${h(rS/n)}${h(gS/n)}${h(bS/n)}`;
+}
+
+// ─────────────────────────────────────────────────────────
+// K-MEANS CLUSTERING (palette mode)
+// ─────────────────────────────────────────────────────────
+function kMeans(data, k=10, iters=12) {
+  const pixels = [];
+  for (let i=0; i<data.length; i+=4) {
+    const r=data[i],g=data[i+1],b=data[i+2],a=data[i+3];
+    if (a<128) continue;
+    const lum = 0.299*r+0.587*g+0.114*b;
+    if (lum>240||lum<12) continue;
+    if (Math.max(r,g,b)-Math.min(r,g,b)<8) continue;
+    pixels.push([r,g,b]);
+  }
+  if (pixels.length < k*5) return [];
+  let centroids = [], step = Math.floor(pixels.length/k);
+  for (let i=0; i<k; i++) centroids.push([...pixels[i*step]]);
+  let assigns = new Array(pixels.length).fill(0);
+  for (let iter=0; iter<iters; iter++) {
+    let changed = false;
+    for (let pi=0; pi<pixels.length; pi++) {
+      const [r,g,b]=pixels[pi]; let best=0,bestD=Infinity;
+      for (let ci=0; ci<k; ci++) {
+        const [cr,cg,cb]=centroids[ci];
+        const d=(r-cr)**2+(g-cg)**2+(b-cb)**2;
+        if(d<bestD){bestD=d;best=ci;}
+      }
+      if(assigns[pi]!==best){assigns[pi]=best;changed=true;}
+    }
+    if(!changed) break;
+    const sums = Array.from({length:k},()=>[0,0,0,0]);
+    for (let pi=0; pi<pixels.length; pi++) {
+      const c=assigns[pi];
+      sums[c][0]+=pixels[pi][0]; sums[c][1]+=pixels[pi][1]; sums[c][2]+=pixels[pi][2]; sums[c][3]++;
+    }
+    centroids = sums.map(([r,g,b,n]) => n>0?[r/n,g/n,b/n]:[0,0,0]);
+  }
+  const counts = new Array(k).fill(0);
+  assigns.forEach(c=>counts[c]++);
+  const minSize = pixels.length*0.015;
+  const h = v => Math.min(255,Math.max(0,Math.round(v))).toString(16).padStart(2,'0');
+  return centroids
+    .map((c,i) => ({hex:`#${h(c[0])}${h(c[1])}${h(c[2])}`, count:counts[i]}))
+    .filter(c => c.count>=minSize)
+    .sort((a,b) => b.count-a.count)
+    .slice(0,12);
+}
+
+function colDist(h1,h2) {
+  const r1=parseInt(h1.slice(1,3),16),g1=parseInt(h1.slice(3,5),16),b1=parseInt(h1.slice(5,7),16);
+  const r2=parseInt(h2.slice(1,3),16),g2=parseInt(h2.slice(3,5),16),b2=parseInt(h2.slice(5,7),16);
+  return Math.sqrt((r1-r2)**2+(g1-g2)**2+(b1-b2)**2);
+}
+
+function dedup(raw, thr=30) {
+  const out = [];
+  for (const c of raw) {
+    if (!out.some(r=>colDist(r.hex,c.hex)<thr)) out.push(c);
+  }
+  return out;
+}
+
+function processFile(file) {
+  return new Promise((res, rej) => {
+    const fr = new FileReader();
+    fr.onload = e => {
+      const img = new Image();
+      img.onload = () => {
+        const cw=Math.min(img.width,500), ch=Math.min(img.height,500);
+        const c = document.createElement('canvas'); c.width=cw; c.height=ch;
+        const ctx = c.getContext('2d'); ctx.drawImage(img,0,0,cw,ch);
+        const raw = ctx.getImageData(0,0,cw,ch).data;
+        const hex = extractHex(raw);
+        const clustersRaw = dedup(kMeans(raw,12,15), 28);
+        const t = document.createElement('canvas');
+        const sc = Math.min(160/img.width, 160/img.height, 1);
+        t.width = Math.round(img.width*sc); t.height = Math.round(img.height*sc);
+        t.getContext('2d').drawImage(img,0,0,t.width,t.height);
+        res({hex, thumb:t.toDataURL('image/jpeg',0.55), clustersRaw});
+      };
+      img.onerror = rej;
+      img.src = e.target.result;
+    };
+    fr.onerror = rej;
+    fr.readAsDataURL(file);
+  });
+}
+
+// ─────────────────────────────────────────────────────────
+// AI CALLS
+// ─────────────────────────────────────────────────────────
+async function callAnalyseSwatch(hex, brand, productName, shadeName, category) {
+  try {
+    const res = await fetch('/api/analyse-swatch', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({hex,brand,productName,shadeName,category})
+    });
+    if (!res.ok) return null;
+    return await res.json();
+  } catch { return null; }
+}
+
+async function callAnalysePalette(hexList, brand, productName) {
+  try {
+    const res = await fetch('/api/analyse-palette', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({hexList,brand,productName})
+    });
+    if (!res.ok) return null;
+    return await res.json();
+  } catch { return null; }
+}
+
+// ─────────────────────────────────────────────────────────
+// HELPERS
+// ─────────────────────────────────────────────────────────
+function pillHTML(season, small=false) {
+  const m = SM[season] || SM['Autumn Mute'];
+  const sz = small ? 'font-size:8px;padding:2px 7px' : '';
+  return `<span class="s-pill" style="${sz};background:${m.bg};color:${m.label};border-color:${m.border}"><span class="s-dot" style="background:${m.dot}"></span>${season}</span>`;
+}
+
+function showError(msg) {
+  const b = document.getElementById('errorBox');
+  b.textContent = msg; b.classList.remove('hidden');
+}
+function hideError() { document.getElementById('errorBox').classList.add('hidden'); }
+
+function setBusy(on) {
+  document.getElementById('busyBanner').classList.toggle('hidden', !on);
+  const btn = document.getElementById('analyseBtn');
+  if (btn) { btn.disabled = on; btn.textContent = on ? 'Analysing…' : 'Analyse with AI →'; }
+}
+
+function showToast(msg) {
+  const t = document.createElement('div');
+  t.className = 'toast'; t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => { t.style.opacity='0'; setTimeout(()=>t.remove(),400); }, 1800);
+}
+
+function esc(v) { return '"' + String(v||'').replace(/"/g,'""') + '"'; }
+
+// ─────────────────────────────────────────────────────────
+// VIEW SWITCHING
+// ─────────────────────────────────────────────────────────
+function switchView(v) {
+  currentView = v;
+  document.getElementById('viewLibrary').classList.toggle('hidden', v!=='library');
+  document.getElementById('viewUniversals').classList.toggle('hidden', v!=='universals');
+  document.getElementById('viewCapture').classList.toggle('hidden', v!=='capture');
+  document.getElementById('tabLib').classList.toggle('active', v==='library');
+  document.getElementById('tabUniv').classList.toggle('active', v==='universals');
+  document.getElementById('tabAdd').classList.toggle('active', v==='capture');
+  document.getElementById('fabBtn').classList.toggle('hidden', v==='capture');
+  if (v==='library') renderLibrary();
+  if (v==='universals') renderUniversals();
+  if (v==='capture') { resetCapture(); buildCatSel(); }
+}
+
+// ─────────────────────────────────────────────────────────
+// STEP NAVIGATION
+// ─────────────────────────────────────────────────────────
+function goStep(n) {
+  currentStep = n;
+  [1,2,3,4].forEach(i => {
+    document.getElementById('step'+i).classList.toggle('hidden', i!==n);
+  });
+  renderStepsBar();
+  if (n===2) renderMiniPreview();
+  if (n===3) renderReviewCard();
+  window.scrollTo(0,0);
+}
+
+function renderStepsBar() {
+  const steps = [['1','Upload'],['2','Details'],['3','Review'],['4','Saved']];
+  document.getElementById('stepsBar').innerHTML = steps.map(([n,l]) => `
+    <div class="step-item">
+      <div class="step-num${parseInt(n)<=currentStep?' done':''}">${n}</div>
+      <span class="step-label${parseInt(n)===currentStep?' active':''}">${l}</span>
+      ${n!=='4'?'<span class="step-sep">›</span>':''}
+    </div>`).join('');
+}
+
+// ─────────────────────────────────────────────────────────
+// PALETTE MODE TOGGLE
+// ─────────────────────────────────────────────────────────
+function togglePaletteMode() {
+  paletteMode = !paletteMode;
+  document.getElementById('palToggle').classList.toggle('on-amber', paletteMode);
+  if (form.thumb) resetDropzone();
+}
+
+function resetDropzone() {
+  clusters = []; form.thumb = null; form.hex = '';
+  document.getElementById('hexBox').classList.add('hidden');
+  document.getElementById('paletteBox').classList.add('hidden');
+  document.getElementById('step1Next').disabled = true;
+  const dz = document.getElementById('dropzone');
+  dz.className = 'dropzone';
+  dz.innerHTML = `<div class="dropzone-icon">📷</div><div class="dropzone-hint">Tap to upload product screenshot</div><input type="file" id="fileIn" accept="image/*" style="display:none" onchange="handleFile(this.files[0])">`;
+}
+
+// ─────────────────────────────────────────────────────────
+// FILE HANDLING
+// ─────────────────────────────────────────────────────────
+async function handleFile(file) {
+  if (!file) return;
+  hideError();
+  const dz = document.getElementById('dropzone');
+  dz.className = 'dropzone loading';
+  dz.innerHTML = `<div style="color:#C0B8B0;font-size:11px;letter-spacing:.06em">${paletteMode?'Detecting shades…':'Extracting colour…'}</div>`;
+
+  try {
+    const {hex, thumb, clustersRaw} = await processFile(file);
+    form.thumb = thumb; form.hex = hex;
+    form.season = suggestSeason(hex); form.seasons = [form.season];
+
+    dz.className = 'dropzone has-img';
+    dz.innerHTML = `<img src="${thumb}" alt=""><div class="replace-hint">Tap to replace</div><input type="file" id="fileIn" accept="image/*" style="display:none" onchange="handleFile(this.files[0])">`;
+
+    if (paletteMode && clustersRaw && clustersRaw.length > 1) {
+      clusters = clustersRaw.map(c => ({hex:c.hex, removed:false}));
+      renderClusterStrip();
+      document.getElementById('paletteBox').classList.remove('hidden');
+      document.getElementById('hexBox').classList.add('hidden');
+    } else {
+      clusters = [];
+      document.getElementById('hexBox').classList.remove('hidden');
+      document.getElementById('paletteBox').classList.add('hidden');
+      updateHexDisplay();
+      if (paletteMode) showError('Only one distinct colour found — analysing as single shade.');
+    }
+    document.getElementById('step1Next').disabled = false;
+  } catch {
+    showError("Couldn't read image. Try another.");
+    dz.className = 'dropzone';
+    dz.innerHTML = `<div class="dropzone-icon">📷</div><div class="dropzone-hint">Tap to upload product screenshot</div><input type="file" id="fileIn" accept="image/*" style="display:none" onchange="handleFile(this.files[0])">`;
+  }
+}
+
+function onHexInput(val) {
+  form.hex = val;
+  if (/^#[0-9a-fA-F]{6}$/.test(val)) {
+    form.season = suggestSeason(val); form.seasons = [form.season];
+    updateHexDisplay();
+  }
+  document.getElementById('step1Next').disabled = !form.thumb || !/^#[0-9a-fA-F]{6}$/.test(val);
+}
+
+function updateHexDisplay() {
+  document.getElementById('hexSwatch').style.background = form.hex;
+  document.getElementById('hexInput').value = form.hex;
+  const chip = document.getElementById('seasonChip');
+  if (form.season) {
+    const m = SM[form.season] || SM['Autumn Mute'];
+    chip.style.cssText = `background:${m.bg};border:1px solid ${m.border}`;
+    chip.innerHTML = `<div class="chip-dot" style="background:${m.dot}"></div>
+      <div>
+        <div style="font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:#B0A8A0;margin-bottom:2px">Suggested season</div>
+        <div class="chip-name" style="color:${m.label}">${form.season}</div>
+        <div class="chip-reason" style="color:${m.label}">${reasonShort(form.hex)}</div>
+      </div>`;
+    chip.classList.remove('hidden');
+  }
+}
+
+function renderClusterStrip() {
+  const active = clusters.filter(c=>!c.removed);
+  document.getElementById('clusterCount').textContent = active.length + ' shades';
+  document.getElementById('clusterStrip').innerHTML = clusters.map((c,i) =>
+    `<div class="cluster-dot${c.removed?' removed':''}" style="background:${c.hex}" onclick="toggleCluster(${i})" title="${c.hex}">
+       <div class="rm-x">×</div>
+     </div>`
+  ).join('');
+}
+
+function toggleCluster(i) {
+  clusters[i].removed = !clusters[i].removed;
+  renderClusterStrip();
+  document.getElementById('step1Next').disabled = clusters.filter(c=>!c.removed).length === 0;
+}
+
+// ─────────────────────────────────────────────────────────
+// STEP 2 UI
+// ─────────────────────────────────────────────────────────
+function buildCatSel() {
+  document.getElementById('catSelWrap').innerHTML = CATS.map(c =>
+    `<button class="cat-sel-btn${form.category===c?' active':''}" onclick="selectCat('${c}')">${c}</button>`
+  ).join('');
+}
+
+function selectCat(c) {
+  form.category = c;
+  document.querySelectorAll('.cat-sel-btn').forEach(b => {
+    b.classList.toggle('active', b.textContent===c);
+  });
+}
+
+function toggleUniversal() {
+  form.universal = !form.universal;
+  document.getElementById('univToggle').classList.toggle('on-gold', form.universal);
+}
+
+function renderMiniPreview() {
+  const m = SM[form.season] || SM['Autumn Mute'];
+  document.getElementById('miniPreview').innerHTML = `
+    ${form.thumb?`<img src="${form.thumb}" alt="">`:'' }
+    <div style="display:flex;align-items:center;gap:8px;flex:1">
+      <div style="width:20px;height:20px;border-radius:50%;background:${form.hex};border:1.5px solid #EDE8E0;flex-shrink:0"></div>
+      <span style="font-family:monospace;font-size:10px;color:#888">${form.hex.toUpperCase()}</span>
+    </div>
+    ${pillHTML(form.season)}`;
+}
+
+// ─────────────────────────────────────────────────────────
+// AI RUN (Step 2 → Step 3)
+// ─────────────────────────────────────────────────────────
+async function runAI() {
+  // Collect form values
+  form.brand        = document.getElementById('f_brand').value.trim();
+  form.productName  = document.getElementById('f_product').value.trim();
+  form.shadeName    = document.getElementById('f_shade').value.trim();
+  form.shadeCode    = document.getElementById('f_code').value.trim();
+  form.finish       = document.getElementById('f_finish').value.trim();
+  form.priceSGD     = document.getElementById('f_price').value.trim();
+  form.whereToBuy   = document.getElementById('f_wtb').value.trim();
+  form.availability = document.getElementById('f_avail').value;
+  form.purchaseLink = document.getElementById('f_link').value.trim();
+  form.imageUrl     = document.getElementById('f_img').value.trim();
+  form.trendTag     = document.getElementById('f_tag').value.trim();
+
+  hideError(); setBusy(true);
+
+  try {
+    const isPalette = paletteMode && clusters.filter(c=>!c.removed).length > 1;
+
+    if (isPalette) {
+      const activeHexes = clusters.filter(c=>!c.removed).map(c=>c.hex);
+      const r = await callAnalysePalette(activeHexes, form.brand, form.productName);
+      if (r && r.dominantSeason) {
+        form.season = r.dominantSeason;
+        form.reason = r.reason || '';
+        form.confidence = r.confidence || '';
+        form.paletteShades = r.shades || [];
+        form.paletteTally = r.seasonTally || {};
+      } else {
+        // Client-side fallback
+        const tally = {};
+        activeHexes.forEach(h => { const s=suggestSeason(h); tally[s]=(tally[s]||0)+1; });
+        form.season = Object.entries(tally).sort((a,b)=>b[1]-a[1])[0][0];
+        form.reason = `Palette analysis: dominant season is ${form.season}.`;
+        form.paletteShades = activeHexes.map(h=>({hex:h,season:suggestSeason(h),label:''}));
+        form.paletteTally = tally;
+      }
+      form.seasons = [form.season];
+    } else {
+      const r = await callAnalyseSwatch(form.hex, form.brand, form.productName, form.shadeName, form.category);
+      if (r && r.season) {
+        form.season = r.season; form.seasons = [r.season];
+        form.undertone = r.undertone || '';
+        form.value = r.value || '';
+        form.chroma = r.chroma || '';
+        form.reason = r.reason || reasonShort(form.hex);
+        form.confidence = r.confidence || '';
+      } else {
+        form.reason = reasonShort(form.hex);
+      }
+      form.paletteShades = null; form.paletteTally = null;
+    }
+  } catch {
+    form.reason = reasonShort(form.hex);
+  }
+
+  setBusy(false);
+  goStep(3);
+}
+
+// ─────────────────────────────────────────────────────────
+// STEP 3 UI
+// ─────────────────────────────────────────────────────────
+function renderSeasonMulti(seasons, onToggle, containerId) {
+  const wrap = document.getElementById(containerId);
+  if (!wrap) return;
+  wrap.innerHTML = SEASONS.map(s => {
+    const ms = SM[s]; const active = seasons.includes(s);
+    return `<button class="sm-btn" onclick="${onToggle}('${s}')"
+      style="background:${active?ms.bg:'#F8F4F0'};color:${active?ms.label:'#888'};border-color:${active?ms.border:'#EDE8E0'};font-weight:${active?700:400}">
+      <span class="sm-dot" style="background:${ms.dot}"></span>${s}</button>`;
+  }).join('');
+}
+
+function toggleFormSeason(s) {
+  if (!form.seasons.length) form.seasons = [form.season];
+  const idx = form.seasons.indexOf(s);
+  if (idx === -1) { form.seasons.push(s); }
+  else if (form.seasons.length > 1) { form.seasons.splice(idx,1); }
+  form.season = form.seasons[0];
+  renderSeasonMulti(form.seasons, 'toggleFormSeason', 'seasonMulti');
+  renderReviewCard();
+}
+
+function renderReviewCard() {
+  if (!form.seasons.length) form.seasons = [form.season];
+  const primary = form.seasons[0];
+  const m = SM[primary] || SM['Autumn Mute'];
+  const card = document.getElementById('reviewCard');
+  card.style.cssText = `background:${m.bg};border:1px solid ${m.border}`;
+  card.innerHTML = `
+    ${form.thumb?`<img src="${form.thumb}" alt="" style="width:60px;height:60px;border-radius:8px;object-fit:cover;flex-shrink:0">`:'' }
+    <div style="flex:1;min-width:0">
+      <div style="display:flex;align-items:center;gap:5px;margin-bottom:6px;flex-wrap:wrap">
+        ${form.seasons.map(s=>pillHTML(s)).join('')}
+        ${paletteMode?'<span style="font-size:8px;background:#FEF6EA;color:#7A4818;border:1px solid #EDD0A8;border-radius:10px;padding:2px 7px;font-weight:700">🎨 Palette</span>':''}
+        ${form.confidence?`<span class="confidence ${form.confidence==='High'?'high':form.confidence==='Low'?'low':'med'}">${form.confidence}</span>`:''}
+      </div>
+      <div style="font-size:11px;font-weight:700;margin-bottom:2px">${form.brand} ${form.productName}</div>
+      <div style="font-size:9.5px;color:#888;margin-bottom:5px">${form.shadeName}${form.shadeCode?' · '+form.shadeCode:''}</div>
+      <div style="display:flex;align-items:center;gap:7px">
+        <div style="width:13px;height:13px;border-radius:50%;background:${form.hex};border:1.5px solid rgba(0,0,0,.1);flex-shrink:0"></div>
+        <span style="font-family:monospace;font-size:9px;color:#888">${form.hex.toUpperCase()}</span>
+        <span style="font-size:8.5px;color:${m.label};opacity:.7">${reasonShort(form.hex)}</span>
+      </div>
+    </div>`;
+
+  renderSeasonMulti(form.seasons, 'toggleFormSeason', 'seasonMulti');
+
+  // Palette breakdown
+  const bd = document.getElementById('paletteBreakdown');
+  if (paletteMode && form.paletteShades && form.paletteShades.length > 0) {
+    const tally = form.paletteTally || {};
+    const maxC = Math.max(...Object.values(tally), 1);
+    const rows = Object.entries(tally).filter(([,v])=>v>0).sort((a,b)=>b[1]-a[1]).map(([season,count]) => {
+      const ms = SM[season]||SM['Autumn Mute'];
+      return `<div class="bd-row">
+        <div class="bd-dot" style="background:${ms.dot}"></div>
+        <span class="bd-season" style="color:${ms.label}">${season}</span>
+        <div class="bd-bar-wrap"><div class="bd-bar" style="width:${Math.round(count/maxC*100)}%;background:${ms.dot}"></div></div>
+        <span class="bd-count">${count}</span>
+      </div>`;
+    }).join('');
+    const shades = form.paletteShades.map(sh => {
+      const ms = SM[sh.season]||SM['Autumn Mute'];
+      return `<div style="display:flex;flex-direction:column;align-items:center;gap:3px">
+        <div style="width:26px;height:26px;border-radius:50%;background:${sh.hex};border:1.5px solid rgba(0,0,0,.08);box-shadow:0 1px 3px rgba(0,0,0,.1)"></div>
+        <span style="font-size:7px;color:${ms.label};font-weight:700;text-align:center;max-width:32px;line-height:1.2">${sh.label||sh.season.split(' ')[0]}</span>
+      </div>`;
+    }).join('');
+    bd.innerHTML = `<div class="palette-breakdown">
+      <div style="font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#B0A8A0;font-weight:700;margin-bottom:10px">Shade breakdown · ${form.paletteShades.length} shades</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px">${shades}</div>
+      ${rows}
+      <div style="margin-top:10px;padding-top:8px;border-top:1px solid #EDE8E0;display:flex;align-items:center;gap:8px">
+        <div style="font-size:9px;color:#B0A8A0;letter-spacing:.1em;text-transform:uppercase;font-weight:700">Dominant season</div>
+        ${pillHTML(form.season)}
+      </div>
+    </div>`;
+    bd.classList.remove('hidden');
+  } else {
+    bd.classList.add('hidden');
+  }
+
+  document.getElementById('f_reason').value = form.reason;
+
+  const details = [
+    ['Category', form.category], ['Finish', form.finish], ['Price', form.priceSGD],
+    ['Where to Buy', form.whereToBuy], ['Availability', form.availability]
+  ].filter(([,v])=>v);
+  const tbl = document.getElementById('sumTable');
+  if (details.length) {
+    tbl.innerHTML = details.map(([k,v])=>`<div class="sum-row"><span class="sum-k">${k}</span><span class="sum-v">${v}</span></div>`).join('');
+    tbl.classList.remove('hidden');
+  } else {
+    tbl.classList.add('hidden');
+  }
+}
+
+// ─────────────────────────────────────────────────────────
+// SAVE
+// ─────────────────────────────────────────────────────────
+async function handleSave() {
+  form.reason = document.getElementById('f_reason').value;
+  if (!form.seasons.length) form.seasons = [form.season];
+  const entry = {
+    ...form,
+    id: Date.now().toString(),
+    addedDate: new Date().toLocaleDateString('en-SG',{month:'short',year:'numeric'})
+  };
+  swatches.unshift(entry);
+  const ok = await persistSwatches();
+  if (ok === false) { swatches.shift(); return; }
+  document.getElementById('savedInfo').textContent = [form.brand, form.productName, form.shadeName].filter(Boolean).join(' · ');
+  const pillsEl = document.getElementById('savedPills');
+  pillsEl.innerHTML = form.seasons.map(s=>pillHTML(s)).join('') + (form.universal?`<span class="univ-badge" style="margin-left:4px">✦ Universal</span>`:'');
+  goStep(4);
+}
+
+function resetCapture() {
+  form = newForm(); currentStep = 1;
+  hideError(); setBusy(false);
+  paletteMode = false; clusters = [];
+  document.getElementById('palToggle').classList.remove('on-amber');
+  document.getElementById('univToggle').classList.remove('on-gold');
+  document.getElementById('paletteBox').classList.add('hidden');
+  const dz = document.getElementById('dropzone');
+  dz.className = 'dropzone';
+  dz.innerHTML = `<div class="dropzone-icon">📷</div><div class="dropzone-hint">Tap to upload product screenshot</div><input type="file" id="fileIn" accept="image/*" style="display:none" onchange="handleFile(this.files[0])">`;
+  document.getElementById('hexBox').classList.add('hidden');
+  document.getElementById('step1Next').disabled = true;
+  buildCatSel();
+  goStep(1);
+}
+
+// ─────────────────────────────────────────────────────────
+// LIBRARY RENDER
+// ─────────────────────────────────────────────────────────
+function swatchSeasons(s) {
+  return (s.seasons && s.seasons.length) ? s.seasons : (s.season ? [s.season] : []);
+}
+
+function renderLibrary() {
+  const sort = (document.getElementById('sortSel')||{}).value || 'newest';
+  let rows = [...swatches];
+
+  // Season filter
+  if (libSeason !== 'All') rows = rows.filter(s => swatchSeasons(s).includes(libSeason));
+  // Category filter
+  if (libCat !== 'All') rows = rows.filter(s => s.category === libCat);
+  // Sort
+  if (sort === 'az')     rows.sort((a,b) => (a.brand||'').localeCompare(b.brand||''));
+  else if (sort==='season') rows.sort((a,b) => (a.season||'').localeCompare(b.season||''));
+
+  // Total
+  document.getElementById('libTotal').textContent = swatches.length;
+
+  // Season tabs — ALL 8 always visible
+  const seasonCounts = {};
+  SEASONS.forEach(s => { seasonCounts[s] = swatches.filter(x=>swatchSeasons(x).includes(s)).length; });
+  document.getElementById('libSeasonStrip').innerHTML =
+    `<button class="s-tab${libSeason==='All'?' active':''}" onclick="setLibSeason('All')">All (${swatches.length})</button>` +
+    SEASONS.map(s =>
+      `<button class="s-tab${libSeason===s?' active':''}" onclick="setLibSeason('${s}')">${s} (${seasonCounts[s]||0})</button>`
+    ).join('');
+
+  // Category filter
+  const catCounts = {};
+  CATS.forEach(c => { catCounts[c] = swatches.filter(x=>x.category===c).length; });
+  document.getElementById('libCatStrip').innerHTML =
+    `<button class="cat-btn${libCat==='All'?' active':''}" onclick="setLibCat('All')">All</button>` +
+    CATS.filter(c=>catCounts[c]>0).map(c =>
+      `<button class="cat-btn${libCat===c?' active':''}" onclick="setLibCat('${c}')">${c} (${catCounts[c]})</button>`
+    ).join('');
+
+  // Grid
+  renderGrid('libGrid', rows, swatches.length===0);
+}
+
+function setLibSeason(s) { libSeason = s; renderLibrary(); }
+function setLibCat(c)    { libCat = c;    renderLibrary(); }
+
+function renderUniversals() {
+  const univAll = swatches.filter(s=>s.universal);
+  let rows = [...univAll];
+  if (univSeason !== 'All') rows = rows.filter(s=>swatchSeasons(s).includes(univSeason));
+  if (univCat    !== 'All') rows = rows.filter(s=>s.category===univCat);
+
+  document.getElementById('univTotal').textContent = univAll.length;
+
+  const seasonCounts = {};
+  SEASONS.forEach(s => { seasonCounts[s] = univAll.filter(x=>swatchSeasons(x).includes(s)).length; });
+  document.getElementById('univSeasonStrip').innerHTML =
+    `<button class="s-tab${univSeason==='All'?' active':''}" onclick="setUnivSeason('All')">All (${univAll.length})</button>` +
+    SEASONS.map(s =>
+      `<button class="s-tab${univSeason===s?' active':''}" onclick="setUnivSeason('${s}')">${s} (${seasonCounts[s]||0})</button>`
+    ).join('');
+
+  const catCounts = {};
+  CATS.forEach(c => { catCounts[c] = univAll.filter(x=>x.category===c).length; });
+  document.getElementById('univCatStrip').innerHTML =
+    `<button class="cat-btn${univCat==='All'?' active':''}" onclick="setUnivCat('All')">All</button>` +
+    CATS.filter(c=>catCounts[c]>0).map(c =>
+      `<button class="cat-btn${univCat===c?' active':''}" onclick="setUnivCat('${c}')">${c} (${catCounts[c]})</button>`
+    ).join('');
+
+  renderGrid('univGrid', rows, univAll.length===0);
+}
+
+function setUnivSeason(s) { univSeason = s; renderUniversals(); }
+function setUnivCat(c)    { univCat = c;    renderUniversals(); }
+
+function renderGrid(gridId, rows, isEmpty) {
+  const grid = document.getElementById(gridId);
+  if (!rows.length) {
+    grid.innerHTML = `<div class="empty-state">
+      <div class="empty-icon">${isEmpty?'🎨':'🔍'}</div>
+      <div class="empty-text">${isEmpty?'No swatches yet.<br><button onclick="switchView(\'capture\')" style="color:#932D28;background:none;border:none;font-weight:700;cursor:pointer;font-size:11px;font-family:inherit">+ Add your first swatch</button>':'No swatches match these filters.'}</div>
+    </div>`;
+    return;
+  }
+  grid.innerHTML = rows.map(s => {
+    const ss = swatchSeasons(s);
+    const m = SM[ss[0]] || SM['Autumn Mute'];
+    const badge = s.universal
+      ? `<div class="card-badge"><span class="univ-badge">✦ Universal</span></div>`
+      : (s.paletteShades && s.paletteShades.length > 0
+          ? `<div class="card-badge"><span class="palette-badge">🎨 Palette</span></div>`
+          : '');
+    return `<div class="card${s.universal?' univ-card':''}" onclick="openDetail('${s.id}')">
+      ${badge}
+      <div class="card-img">
+        ${s.thumb?`<img src="${s.thumb}" alt="${s.shadeName}">`:`<div class="hex-fill" style="background:${s.hex}"></div>`}
+      </div>
+      <div class="card-body">
+        <div class="card-hex-row">
+          <div class="hex-dot" style="background:${s.hex}"></div>
+          <span class="hex-code">${s.hex.toUpperCase()}</span>
+        </div>
+        <div class="card-brand">${s.brand||''}</div>
+        <div class="card-shade">${s.shadeName||''}</div>
+        <div class="card-seasons">${ss.map(x=>pillHTML(x,true)).join('')}</div>
+        ${s.category?`<span class="card-cat">${s.category}</span>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ─────────────────────────────────────────────────────────
+// CSV EXPORT
+// ─────────────────────────────────────────────────────────
+function exportCSV() {
+  let rows = libSeason==='All' ? swatches : swatches.filter(s=>swatchSeasons(s).includes(libSeason));
+  if (!rows.length) { showToast('No swatches to export'); return; }
+  const lines = [CSV_HEADERS.map(esc).join(','), ...rows.map(s =>
+    [s.category,s.brand,s.productName,s.shadeName,s.shadeCode,
+     swatchSeasons(s).join(' | '),s.undertone,s.finish,s.hex,s.priceSGD,
+     s.whereToBuy,s.purchaseLink,s.imageUrl,s.availability,s.trendTag,
+     s.universal?'Yes':'',s.addedDate,s.reason].map(esc).join(',')
+  )];
+  const blob = new Blob([lines.join('\n')], {type:'text/csv'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `VEU_Swatches_${libSeason.replace(/ /g,'_')}.csv`;
+  a.click(); URL.revokeObjectURL(url);
+}
+
+function exportUnivCSV() {
+  const rows = swatches.filter(s=>s.universal);
+  if (!rows.length) { showToast('No universal swatches to export'); return; }
+  const lines = [CSV_HEADERS.map(esc).join(','), ...rows.map(s =>
+    [s.category,s.brand,s.productName,s.shadeName,s.shadeCode,
+     swatchSeasons(s).join(' | '),s.undertone,s.finish,s.hex,s.priceSGD,
+     s.whereToBuy,s.purchaseLink,s.imageUrl,s.availability,s.trendTag,
+     'Yes',s.addedDate,s.reason].map(esc).join(',')
+  )];
+  const blob = new Blob([lines.join('\n')], {type:'text/csv'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'VEU_Universal_Swatches.csv';
+  a.click(); URL.revokeObjectURL(url);
+}
+
+// ─────────────────────────────────────────────────────────
+// DETAIL MODAL
+// ─────────────────────────────────────────────────────────
+function openDetail(id) {
+  const s = swatches.find(x=>x.id===id); if (!s) return;
+  const ss = swatchSeasons(s);
+  const m = SM[ss[0]] || SM['Autumn Mute'];
+  const details = [
+    ['Finish', s.finish], ['Price (SGD)', s.priceSGD], ['Where to Buy', s.whereToBuy],
+    ['Availability', s.availability], ['Trend Tag', s.trendTag], ['Added', s.addedDate]
+  ].filter(([,v])=>v);
+
+  document.getElementById('detailContent').innerHTML = `
+    <div class="modal-head">
+      ${s.thumb?`<img src="${s.thumb}" alt="${s.shadeName}">`:'' }
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:7px">
+          ${ss.map(x=>pillHTML(x)).join('')}
+          ${s.universal?`<span class="univ-badge">✦ Universal</span>`:''}
+        </div>
+        <div style="font-size:15px;font-weight:700;margin-bottom:3px">${s.brand||''}</div>
+        <div style="font-size:12px;color:#555;margin-bottom:3px">${s.productName||''}</div>
+        <div style="font-size:11px;color:#888">${s.shadeName||''}${s.shadeCode?' · '+s.shadeCode:''}</div>
+      </div>
+    </div>
+    <div class="modal-hex-row">
+      <div class="modal-hex-sw" style="background:${s.hex}"></div>
+      <div>
+        <div style="font-family:monospace;font-size:11px;color:#444">${s.hex.toUpperCase()}</div>
+        <div style="font-size:9.5px;color:#A0988F;margin-top:2px">${reasonShort(s.hex)}</div>
+      </div>
+      ${s.category?`<span style="margin-left:auto;font-size:9px;color:#888;background:#F5F0EB;padding:3px 9px;border-radius:10px">${s.category}</span>`:''}
+    </div>
+    ${s.reason?`<div style="font-size:11px;color:#555;line-height:1.7;margin-bottom:14px;padding:10px 14px;background:${m.bg};border-radius:8px;border:1px solid ${m.border}">${s.reason}</div>`:''}
+    ${s.paletteShades && s.paletteShades.length>0 ? `
+      <div style="margin-bottom:14px">
+        <div class="lbl">Shade breakdown · ${s.paletteShades.length} shades</div>
+        <div class="palette-detail-strip">
+          ${s.paletteShades.map(sh=>{const ms=SM[sh.season]||SM['Autumn Mute'];return`<div style="display:flex;flex-direction:column;align-items:center;gap:3px" title="${sh.season}${sh.label?' · '+sh.label:''}">
+            <div class="palette-detail-dot" style="background:${sh.hex}"></div>
+            <span style="font-size:7px;color:${ms.label};font-weight:700;text-align:center;max-width:32px;line-height:1.2">${sh.label||sh.season.split(' ')[0]}</span>
+          </div>`;}).join('')}
+        </div>
+      </div>`:'' }
+    ${details.length?`<div class="sum-table" style="margin-bottom:14px">${details.map(([k,v])=>`<div class="sum-row"><span class="sum-k">${k}</span><span class="sum-v">${v}</span></div>`).join('')}</div>`:''}
+    ${s.purchaseLink?`<a href="${s.purchaseLink}" target="_blank" class="btn-buy">Buy Now ↗</a>`:''}
+    <button class="btn-modal-edit" onclick="closeDetail();openEdit('${s.id}')">✏︎ Edit Swatch</button>
+    <button class="btn-modal-del" id="delBtn_${s.id}" onclick="showDelConfirm('${s.id}')">Remove from Library</button>
+    <div id="delConfirm_${s.id}" class="del-confirm hidden">
+      <div style="font-size:11px;color:#C02020;font-weight:600;margin-bottom:10px">Remove this swatch? This cannot be undone.</div>
+      <div style="display:flex;gap:8px;justify-content:center">
+        <button onclick="hideDelConfirm('${s.id}')" style="background:#fff;color:#888;border:1px solid #EDE8E0;border-radius:6px;padding:7px 16px;font-size:10px;font-weight:600;cursor:pointer;font-family:inherit">Cancel</button>
+        <button onclick="doDelete('${s.id}')" style="background:#C02020;color:#fff;border:none;border-radius:6px;padding:7px 16px;font-size:10px;font-weight:600;cursor:pointer;font-family:inherit">Yes, Remove</button>
+      </div>
+    </div>`;
+
+  document.getElementById('detailModal').classList.remove('hidden');
+}
+
+function closeDetail() { document.getElementById('detailModal').classList.add('hidden'); }
+
+function showDelConfirm(id) {
+  document.getElementById('delBtn_'+id).classList.add('hidden');
+  document.getElementById('delConfirm_'+id).classList.remove('hidden');
+}
+function hideDelConfirm(id) {
+  document.getElementById('delBtn_'+id).classList.remove('hidden');
+  document.getElementById('delConfirm_'+id).classList.add('hidden');
+}
+
+async function doDelete(id) {
+  swatches = swatches.filter(s=>s.id!==id);
+  await persistSwatches();
+  closeDetail();
+  renderLibrary();
+  renderUniversals();
+}
+
+// ─────────────────────────────────────────────────────────
+// EDIT MODAL
+// ─────────────────────────────────────────────────────────
+function openEdit(id) {
+  const s = swatches.find(x=>x.id===id); if (!s) return;
+  editId = id;
+  editForm = JSON.parse(JSON.stringify(s)); // deep copy
+  editPalMode = false;
+  editClusters = [];
+  renderEditModal();
+  document.getElementById('editModal').classList.remove('hidden');
+}
+
+function closeEdit() {
+  document.getElementById('editModal').classList.add('hidden');
+  editId = null; editForm = {}; editPalMode = false; editClusters = [];
+}
+
+function renderEditModal() {
+  const editSeasons = (editForm.seasons && editForm.seasons.length) ? editForm.seasons : [editForm.season];
+  document.getElementById('editContent').innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">
+      <div style="font-family:'Cormorant Garamond',serif;font-size:20px;color:#932D28;font-weight:400;letter-spacing:.05em">Edit Swatch</div>
+      <button onclick="closeEdit()" style="background:none;border:none;font-size:24px;color:#C0B8B0;cursor:pointer;line-height:1;padding:0">×</button>
+    </div>
+
+    ${editForm.thumb?`<div style="width:100%;aspect-ratio:16/7;border-radius:10px;overflow:hidden;margin-bottom:8px;background:#F8F4F0"><img src="${editForm.thumb}" style="width:100%;height:100%;object-fit:cover"></div>`:''}
+
+    <div class="edit-section">Colour</div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
+      <div id="editHexSw" style="width:34px;height:34px;border-radius:50%;background:${editForm.hex};border:2px solid #EDE8E0;flex-shrink:0"></div>
+      <div style="flex:1">
+        <input id="edit_hex" value="${editForm.hex}" style="font-family:monospace" placeholder="#rrggbb" oninput="onEditHex(this.value)">
+        <div id="editReasonShort" style="font-size:9px;color:#A0988F;margin-top:4px;letter-spacing:.04em">${reasonShort(editForm.hex)}</div>
+      </div>
+    </div>
+
+    <div class="edit-section">Seasons</div>
+    <div style="font-size:9px;color:#B0A8A0;margin-bottom:8px">First selected = primary season on card.</div>
+    <div class="season-multi-wrap" id="editSeasonMulti"></div>
+
+    <div class="edit-section">Product Info</div>
+    <div class="grid2" style="margin-bottom:10px">
+      <div class="field"><div class="lbl">Brand</div><input id="edit_brand" value="${editForm.brand||''}"></div>
+      <div class="field"><div class="lbl">Product Name</div><input id="edit_product" value="${editForm.productName||''}"></div>
+      <div class="field"><div class="lbl">Shade Name</div><input id="edit_shade" value="${editForm.shadeName||''}"></div>
+      <div class="field"><div class="lbl">Shade Code</div><input id="edit_code" value="${editForm.shadeCode||''}"></div>
+    </div>
+
+    <div class="field">
+      <div class="lbl">Category</div>
+      <div class="cat-select-wrap" id="editCatWrap">
+        ${CATS.map(c=>`<button class="cat-sel-btn${editForm.category===c?' active':''}" onclick="editSelectCat('${c}')">${c}</button>`).join('')}
+      </div>
+    </div>
+
+    <div class="edit-section">Details</div>
+    <div class="grid2" style="margin-bottom:10px">
+      <div class="field"><div class="lbl">Finish</div><input id="edit_finish" value="${editForm.finish||''}"></div>
+      <div class="field"><div class="lbl">Price (SGD)</div><input id="edit_price" value="${editForm.priceSGD||''}"></div>
+      <div class="field"><div class="lbl">Where to Buy SG</div><input id="edit_wtb" value="${editForm.whereToBuy||''}"></div>
+      <div class="field"><div class="lbl">Availability</div>
+        <select id="edit_avail">
+          ${['Widely available','Available','Online only','Limited'].map(o=>`<option${editForm.availability===o?' selected':''}>${o}</option>`).join('')}
+        </select>
+      </div>
+    </div>
+    <div class="field"><div class="lbl">Purchase Link</div><input id="edit_link" value="${editForm.purchaseLink||''}"></div>
+    <div class="field"><div class="lbl">Product Image URL</div><input id="edit_img" value="${editForm.imageUrl||''}"></div>
+    <div class="field"><div class="lbl">Trend Tag</div><input id="edit_tag" value="${editForm.trendTag||''}"></div>
+
+    <div class="edit-section">Notes</div>
+    <div class="field" style="margin-bottom:0">
+      <textarea id="edit_reason" rows="4">${editForm.reason||''}</textarea>
+    </div>
+
+    <div class="edit-section">Universal</div>
+    <div class="toggle-row${editForm.universal?' on-gold':''}" id="editUnivToggle" onclick="toggleEditUniversal()">
+      <div>
+        <div class="toggle-label">✦ Mark as Universal</div>
+        <div class="toggle-sub">Universally flattering — works across all seasons</div>
+      </div>
+      <div class="pill-track"><div class="pill-thumb"></div></div>
+    </div>
+
+    <div class="edit-section">Re-analyse with AI</div>
+    <div style="background:#FDFAF7;border:1px solid #EDE8E0;border-radius:8px;padding:14px;margin-bottom:6px">
+      <div style="font-size:10px;color:#A0988F;margin-bottom:10px;line-height:1.6">Optionally upload a new image, then re-run AI to refresh season and notes. Toggle Palette Mode first for eyeshadow palettes.</div>
+      <div class="toggle-row" id="editPalToggle" onclick="toggleEditPalMode()" style="margin-bottom:10px">
+        <div>
+          <div class="toggle-label">🎨 Palette Mode</div>
+          <div class="toggle-sub">For eyeshadow palettes with multiple shades</div>
+        </div>
+        <div class="pill-track"><div class="pill-thumb"></div></div>
+      </div>
+      <div class="dropzone" id="editDropzone" style="min-height:80px;margin-bottom:10px" onclick="document.getElementById('editFileIn').click()">
+        <div class="dropzone-icon" style="font-size:22px">📷</div>
+        <div class="dropzone-hint">Tap to upload a new image (optional)</div>
+        <input type="file" id="editFileIn" accept="image/*" style="display:none" onchange="handleEditFile(this.files[0])">
+      </div>
+      <div class="palette-box hidden" id="editPalBox" style="margin-bottom:10px">
+        <div class="lbl">Detected shades — <span id="editClusterCount" style="color:#932D28"></span></div>
+        <div class="cluster-strip" id="editClusterStrip"></div>
+        <div style="font-size:9.5px;color:#B0A8A0;line-height:1.6">Tap a shade to remove it.</div>
+      </div>
+      <button class="btn-green" id="editAnalyseBtn" onclick="runEditAI()">✦ Re-analyse with AI</button>
+      <div id="editBusy" style="display:none;text-align:center;padding:8px 0;font-size:11px;color:#932D28;letter-spacing:.06em">Analysing…</div>
+      <div class="analyse-result" id="editAnalyseResult"></div>
+    </div>
+
+    <div class="edit-save-bar">
+      <button class="btn-ghost" onclick="closeEdit()">Cancel</button>
+      <button class="btn" onclick="saveEdit()" style="flex:1">✓ Save Changes</button>
+    </div>`;
+
+  // Render season multi-select into edit modal
+  renderEditSeasonMulti();
+}
+
+function renderEditSeasonMulti() {
+  const wrap = document.getElementById('editSeasonMulti');
+  if (!wrap) return;
+  const editSeasons = (editForm.seasons && editForm.seasons.length) ? editForm.seasons : [editForm.season];
+  wrap.innerHTML = SEASONS.map(s => {
+    const ms = SM[s]; const active = editSeasons.includes(s);
+    return `<button class="sm-btn" onclick="editToggleSeason('${s}')"
+      style="background:${active?ms.bg:'#F8F4F0'};color:${active?ms.label:'#888'};border-color:${active?ms.border:'#EDE8E0'};font-weight:${active?700:400}">
+      <span class="sm-dot" style="background:${ms.dot}"></span>${s}</button>`;
+  }).join('');
+}
+
+function editToggleSeason(s) {
+  if (!editForm.seasons || !editForm.seasons.length) editForm.seasons = [editForm.season];
+  const idx = editForm.seasons.indexOf(s);
+  if (idx === -1) { editForm.seasons.push(s); }
+  else if (editForm.seasons.length > 1) { editForm.seasons.splice(idx,1); }
+  editForm.season = editForm.seasons[0];
+  renderEditSeasonMulti();
+}
+
+function onEditHex(val) {
+  editForm.hex = val;
+  const sw = document.getElementById('editHexSw');
+  const rs = document.getElementById('editReasonShort');
+  if (sw) sw.style.background = /^#[0-9a-fA-F]{6}$/.test(val) ? val : '#EDE8E0';
+  if (rs) rs.textContent = /^#[0-9a-fA-F]{6}$/.test(val) ? reasonShort(val) : '';
+}
+
+function editSelectCat(c) {
+  editForm.category = c;
+  document.querySelectorAll('#editCatWrap .cat-sel-btn').forEach(b => {
+    b.classList.toggle('active', b.textContent===c);
+  });
+}
+
+function toggleEditUniversal() {
+  editForm.universal = !editForm.universal;
+  document.getElementById('editUnivToggle').classList.toggle('on-gold', editForm.universal);
+}
+
+function toggleEditPalMode() {
+  editPalMode = !editPalMode;
+  document.getElementById('editPalToggle').classList.toggle('on-amber', editPalMode);
+  editClusters = [];
+  document.getElementById('editPalBox').classList.add('hidden');
+  const dz = document.getElementById('editDropzone');
+  dz.className = 'dropzone';
+  dz.style.minHeight = '80px';
+  dz.innerHTML = `<div class="dropzone-icon" style="font-size:22px">📷</div><div class="dropzone-hint">Tap to upload a new image (optional)</div><input type="file" id="editFileIn" accept="image/*" style="display:none" onchange="handleEditFile(this.files[0])">`;
+}
+
+async function handleEditFile(file) {
+  if (!file) return;
+  const dz = document.getElementById('editDropzone');
+  dz.className = 'dropzone loading';
+  dz.innerHTML = `<div style="color:#C0B8B0;font-size:11px">${editPalMode?'Detecting shades…':'Extracting colour…'}</div>`;
+  try {
+    const {hex, thumb, clustersRaw} = await processFile(file);
+    editForm.thumb = thumb; editForm.hex = hex;
+    const hexSw = document.getElementById('editHexSw');
+    const hexIn = document.getElementById('edit_hex');
+    const rs = document.getElementById('editReasonShort');
+    if (hexSw) hexSw.style.background = hex;
+    if (hexIn) hexIn.value = hex;
+    if (rs) rs.textContent = reasonShort(hex);
+    dz.className = 'dropzone has-img';
+    dz.innerHTML = `<img src="${thumb}" style="max-height:120px;max-width:100%;border-radius:6px;object-fit:contain"><div class="replace-hint" style="margin-top:6px">Tap to replace</div><input type="file" id="editFileIn" accept="image/*" style="display:none" onchange="handleEditFile(this.files[0])">`;
+    if (editPalMode && clustersRaw && clustersRaw.length > 1) {
+      editClusters = clustersRaw.map(c=>({hex:c.hex,removed:false}));
+      renderEditClusters();
+      document.getElementById('editPalBox').classList.remove('hidden');
+    } else {
+      editClusters = [];
+      document.getElementById('editPalBox').classList.add('hidden');
+    }
+  } catch {
+    dz.className = 'dropzone';
+    dz.innerHTML = `<div class="dropzone-icon" style="font-size:22px">📷</div><div class="dropzone-hint" style="color:#C02020">Couldn't read image. Try another.</div><input type="file" id="editFileIn" accept="image/*" style="display:none" onchange="handleEditFile(this.files[0])">`;
+  }
+}
+
+function renderEditClusters() {
+  const active = editClusters.filter(c=>!c.removed);
+  document.getElementById('editClusterCount').textContent = active.length + ' shades';
+  document.getElementById('editClusterStrip').innerHTML = editClusters.map((c,i) =>
+    `<div class="cluster-dot${c.removed?' removed':''}" style="background:${c.hex}" onclick="toggleEditCluster(${i})" title="${c.hex}">
+       <div class="rm-x">×</div>
+     </div>`
+  ).join('');
+}
+
+function toggleEditCluster(i) {
+  editClusters[i].removed = !editClusters[i].removed;
+  renderEditClusters();
+}
+
+function showEditResult(type, msg) {
+  const el = document.getElementById('editAnalyseResult');
+  const colors = {
+    success:{bg:'#F0FEF4',border:'#A8D8B0',color:'#1F6B30'},
+    warning:{bg:'#FEF9EC',border:'#E8D0A0',color:'#7A5010'},
+    error:  {bg:'#FEF0F0',border:'#F5BFBF',color:'#C02020'}
+  };
+  const c = colors[type] || colors.success;
+  el.style.cssText = `display:block;margin-top:10px;padding:10px 12px;border-radius:8px;font-size:10px;line-height:1.6;background:${c.bg};border:1px solid ${c.border};color:${c.color}`;
+  el.textContent = msg;
+}
+
+async function runEditAI() {
+  // Collect latest form values
+  editForm.brand       = (document.getElementById('edit_brand')||{}).value   || editForm.brand;
+  editForm.productName = (document.getElementById('edit_product')||{}).value || editForm.productName;
+  editForm.shadeName   = (document.getElementById('edit_shade')||{}).value   || editForm.shadeName;
+  editForm.hex         = (document.getElementById('edit_hex')||{}).value     || editForm.hex;
+  editForm.category    = editForm.category;
+
+  const btn  = document.getElementById('editAnalyseBtn');
+  const busy = document.getElementById('editBusy');
+  const res  = document.getElementById('editAnalyseResult');
+  if (btn)  btn.style.display  = 'none';
+  if (busy) busy.style.display = 'block';
+  if (res)  res.style.display  = 'none';
+
+  try {
+    const isPalette = editPalMode && editClusters.filter(c=>!c.removed).length > 1;
+
+    if (isPalette) {
+      const activeHexes = editClusters.filter(c=>!c.removed).map(c=>c.hex);
+      const r = await callAnalysePalette(activeHexes, editForm.brand, editForm.productName);
+      if (r && r.dominantSeason) {
+        editForm.season = r.dominantSeason;
+        editForm.seasons = [r.dominantSeason];
+        editForm.reason = r.reason || '';
+        editForm.confidence = r.confidence || '';
+        editForm.paletteShades = r.shades || [];
+        editForm.paletteTally = r.seasonTally || {};
+      } else {
+        const tally = {};
+        activeHexes.forEach(h=>{ const s=suggestSeason(h); tally[s]=(tally[s]||0)+1; });
+        const dominant = Object.entries(tally).sort((a,b)=>b[1]-a[1])[0][0];
+        editForm.season = dominant; editForm.seasons = [dominant];
+        editForm.reason = `Palette analysis: dominant season is ${dominant}.`;
+        editForm.paletteShades = activeHexes.map(h=>({hex:h,season:suggestSeason(h),label:''}));
+        editForm.paletteTally = tally;
+      }
+    } else {
+      const r = await callAnalyseSwatch(editForm.hex, editForm.brand, editForm.productName, editForm.shadeName, editForm.category);
+      if (r && r.season) {
+        editForm.season = r.season; editForm.seasons = [r.season];
+        editForm.undertone = r.undertone || ''; editForm.value = r.value || ''; editForm.chroma = r.chroma || '';
+        editForm.reason = r.reason || reasonShort(editForm.hex);
+        editForm.confidence = r.confidence || '';
+      } else {
+        editForm.season = suggestSeason(editForm.hex);
+        editForm.seasons = [editForm.season];
+        editForm.reason = reasonShort(editForm.hex);
+      }
+    }
+
+    // Update the notes textarea
+    const ta = document.getElementById('edit_reason');
+    if (ta) ta.value = editForm.reason;
+    // Re-render season buttons
+    renderEditSeasonMulti();
+    showEditResult('success', `✓ Season updated to ${editForm.season}. Notes refreshed. Review, then Save Changes.`);
+  } catch {
+    showEditResult('error', 'AI analysis failed. Check your connection and try again.');
+  }
+
+  if (btn)  btn.style.display  = '';
+  if (busy) busy.style.display = 'none';
+}
+
+async function saveEdit() {
+  // Collect all editable fields
+  const fields = {
+    hex:         (document.getElementById('edit_hex')||{}).value     || editForm.hex,
+    brand:       (document.getElementById('edit_brand')||{}).value   || '',
+    productName: (document.getElementById('edit_product')||{}).value || '',
+    shadeName:   (document.getElementById('edit_shade')||{}).value   || '',
+    shadeCode:   (document.getElementById('edit_code')||{}).value    || '',
+    finish:      (document.getElementById('edit_finish')||{}).value  || '',
+    priceSGD:    (document.getElementById('edit_price')||{}).value   || '',
+    whereToBuy:  (document.getElementById('edit_wtb')||{}).value     || '',
+    availability:(document.getElementById('edit_avail')||{}).value   || 'Widely available',
+    purchaseLink:(document.getElementById('edit_link')||{}).value    || '',
+    imageUrl:    (document.getElementById('edit_img')||{}).value     || '',
+    trendTag:    (document.getElementById('edit_tag')||{}).value     || '',
+    reason:      (document.getElementById('edit_reason')||{}).value  || '',
+  };
+
+  // Merge into editForm
+  Object.assign(editForm, fields);
+
+  // Ensure seasons consistency
+  if (!editForm.seasons || !editForm.seasons.length) editForm.seasons = [editForm.season];
+  editForm.season = editForm.seasons[0];
+
+  // Update in array
+  const idx = swatches.findIndex(x=>x.id===editId);
+  if (idx !== -1) swatches[idx] = {...editForm};
+
+  const ok = await persistSwatches();
+  if (ok === false) return;
+
+  closeEdit();
+  renderLibrary();
+  renderUniversals();
+  showToast('Changes saved');
+}
+
+// ─────────────────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────────────────
+function init() {
+  renderStepsBar();
+  switchView('library');  // sets initial view + renders library
+  loadSwatches();          // async — updates render when data arrives
+  startPolling();          // sync every 15s
+}
+
+init();
+</script>
+</body>
+</html>

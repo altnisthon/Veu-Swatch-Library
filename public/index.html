@@ -517,15 +517,25 @@ function newForm() {
 async function loadSwatches() {
   try {
     const res = await fetch('/api/swatches-get');
+    console.log('[VEU] swatches-get status:', res.status);
     if (res.ok) {
       const d = await res.json();
-      if (Array.isArray(d)) {
+      console.log('[VEU] swatches-get raw response type:', typeof d, 'isArray:', Array.isArray(d), 'length:', Array.isArray(d) ? d.length : 'n/a');
+      if (typeof d === 'string') {
+        // Double-encoded — Upstash returned a JSON string instead of parsed array
+        console.log('[VEU] double-encoded detected, parsing again');
+        const parsed = JSON.parse(d);
+        if (Array.isArray(parsed)) swatches = parsed.map(migrateEntry);
+      } else if (Array.isArray(d)) {
         swatches = d.map(migrateEntry);
+      } else {
+        console.warn('[VEU] unexpected response shape:', d);
       }
     }
   } catch (e) {
-    console.error('Load failed', e);
+    console.error('[VEU] loadSwatches failed:', e);
   }
+  console.log('[VEU] swatches loaded, count:', swatches.length);
   renderLibrary();
   renderUniversals();
 }
